@@ -2,6 +2,11 @@
 
 # 1. Overview
 
+This project provides a complete development environment using Docker Compose for a web application with a Vue.js frontend and a PHP backend.
+
+* The environment is configured to facilitate a smooth development workflow with features like live compilation for Sass and hot-reloading for Vue.js. 
+* The frontend and backend services run in separate Docker containers, allowing for clear separation of concerns.
+
 ## 1.1 Directory Structure
 ```
 .
@@ -30,8 +35,42 @@
 │       ├── styles/
 │       └── main.scss
 │
+├── docs/
+│
+├── logs/
+│
 └── .gitignore
 ```
+
+## 1.2 Getting Started
+
+This section outlines the minimal steps required to get the development environment up and running.
+
+## 1.2.1 Prerequisites
+
+Make sure you have Docker and Docker Compose installed on your system.
+
+## 1.2.2 Installation
+
+* **Clone Repository:** 
+```bash
+  git clone https://github.com/mnaatjes/docker-vue-php-template.git
+  cd docker-vue-php-template
+```
+
+* **Build and Run Containers:**
+```bash
+  docker compose up --build -d
+```
+* **This command will:**
+  * Build the frontend container using Dockerfile.frontend.
+  * Build the php container using Dockerfile.php.
+  * Start the npm run dev command in the frontend container.
+  * Start the Apache server in the php container.
+
+* **Access the application::**
+  * Open your web browser and navigate to http://localhost:8085 to see the running application. 
+  * The Vue.js application will be rendered inside the index.php file.
 
 
 ---
@@ -151,12 +190,12 @@ The `~/frontend/src/App.vue` file is the root component of your application.
   </style>
 ```
 
-## 2.1 Index.html
+## 2.4 Index.php
 
 For these files (`~/frontend/src/main.js` & `~/frontend/src/App.vue`) to work, you also need to ensure that your index.php (or index.html) file has an HTML element for the Vue app to mount to.
 
 * The vite build process will automatically detect the entry point in main.js and inject the necessary script tags into this file when you build for production, or serve the content for development.
-* **Example `~/src/public/index.html` File:**
+* **Example `~/src/public/index.php` File:**
 
 ```html
   <!DOCTYPE html>
@@ -173,9 +212,6 @@ For these files (`~/frontend/src/main.js` & `~/frontend/src/App.vue`) to work, y
       <script type="module" src="http://localhost:5173/src/main.js"></script>
   </body>
   </html>
-```
-
-## 2.2 Workflow
 
 
 ---
@@ -194,7 +230,6 @@ The frontend container uses Vite, which is a modern frontend build tool. Vite is
 ## 3.1 Creating Sass Files
 * Create Sass document within `~/frontend/styles/...` Directory (See Below)
 * Import the main Sass file into Vue.js application file `~/frontend/src/main.js`
-* 
 
 * **Example SASS Directory Structure:**
 ```
@@ -212,9 +247,21 @@ The frontend container uses Vite, which is a modern frontend build tool. Vite is
 ---
 
 
+# 4.0 PHP Backend
+
+This project is configured to serve PHP files using the Apache web server within the php container.
+
+* File Location: All PHP files should be placed inside the src/backend/ directory.
+* Web Root: The Apache server's document root is set to /var/www/html/src/public via the 000-default.conf file. This means files in the src/public directory are directly accessible by the web server.
+* PHP Configuration: The Dockerfile.php includes common PHP extensions like pdo_mysql, gd, mbstring, and zip, along with the Composer dependency manager.
+
+
+---
+
+
 # Appendix A: Configuration Files
 
-## A.1 Docker-Compose
+## A.1 Docker-Compose.yml
 ```yml
 version: '3.8'
 
@@ -370,10 +417,107 @@ services:
 ---
 
 
-# Appendix B: How-To's and Commands
-
-## B.1 Creating and Compiling Sass Styles
+# Appendix B: How-To's and Help
 
 
+---
 
-## B.2 Creating and Using Vue.js Components
+
+# Appendix C: Managing Docker Containers
+
+## C.1 Basic Commands
+
+* **Start Services in background:**
+```bash
+  docker compose up -d
+```
+
+* **Build Services in Background:**
+```bash
+  docker compose up --build -d
+```
+
+* **Stop Services:**
+```bash
+  docker compose down
+```
+
+* **View Logs:**
+```bash
+  docker compose logs -f
+```
+
+## C.2 Exec Commands
+
+Runs a command in an existing, running container. The command shares the environment and filesystem of the running service.
+
+* **Traverse Containers:**
+Traverse container directories: To get an interactive shell to explore the container's filesystem, use a command like sh or bash.
+
+```bash
+  docker compose exec frontend sh
+```
+
+* **One Off List:**
+This will open a shell in the frontend container, allowing you to cd and ls the directories.
+  * Run a one-off command: You can execute any command inside the running service.
+
+```bash
+  docker compose exec php ls -l /var/www/html
+```
+
+* **Run as Different User:**
+Run as a different user: Use the --user or -u flag to run the command as a specific user.
+
+```bash
+  docker compose exec --user root frontend npm install
+```
+
+* **Docker Compose Run:**
+Starts a new, independent container for a one-time command. 
+  * This is useful for tasks that are not part of the main service lifecycle, like database migrations or running tests. 
+  * The new container is configured with the same volumes and network settings as the service in the docker-compose.yml file, but it doesn't expose the service's ports by default.
+
+```bash
+  # Example: run a migration script in a new container
+  docker compose run --rm backend php artisan migrate  
+```
+
+## C.3 Other Useful Commands
+
+* **List Containers and Services:**
+Lists the containers and services managed by Docker Compose, showing their status, ports, and names.
+
+```bash
+  docker compose ps
+  docker compose ps -a
+```
+
+* **Logs:**
+Follows the log output of all services in real-time. You can also specify a service name to filter the logs.
+
+```bash
+  # View all logs
+  docker compose logs -f
+
+  # View logs for a specific service
+  docker compose logs -f frontend
+```
+
+* **Build Specific Service Images:**
+Builds or rebuilds the service images. This is necessary if you've made changes to a Dockerfile.
+
+```bash
+  # Build all services
+  docker compose build
+
+  # Build a specific service
+  docker compose build frontend
+```
+
+* **Force Recreate:**
+Forces Docker Compose to stop and recreate all containers, even if their configuration hasn't changed. This can be useful for troubleshooting.
+
+```bash
+  docker compose up --force-recreate
+```
