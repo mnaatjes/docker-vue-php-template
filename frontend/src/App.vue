@@ -4,36 +4,48 @@
     <p>This is your main application component.</p>
     <button @click="incrementCount">Click me</button>
     <p>Button was clicked {{ count }} times.</p>
+    
+    <Table :data="tableData" />
+    
   </div>
 </template>
 
 <script>
-// The script section defines the component's logic, data, and methods.
 import { ref } from 'vue';
+// Import the new Table component
+import Table from './components/Table.vue';
 
 export default {
-  // Use the setup function for composition API
+  // Register the component
+  components: {
+    Table
+  },
   setup() {
-    const count = ref(0); // A reactive variable for the click count
-
+    const count = ref(0);
+    
+    // Sample data for the table
+    const tableData = ref([
+      { id: 1, name: 'Alice', age: 25 },
+      { id: 2, name: 'Bob', age: 30 },
+      { id: 3, name: 'Charlie', age: 35 }
+    ]);
+    
     const incrementCount = () => {
       count.value++;
     };
 
-    // Return the reactive data and methods to be used in the template
     return {
       count,
-      incrementCount
+      incrementCount,
+      tableData
     };
   }
 };
 </script>
 
 <style lang="scss">
-/*
-  The style section contains the CSS for this component.
-  The `lang="scss"` attribute tells Vite to process this as a Sass file.
-*/
+@use 'sass:color';
+
 #vue-app {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -55,7 +67,7 @@ export default {
     border-radius: 8px;
     transition: background-color 0.3s;
     &:hover {
-      background-color: darken(#42b983, 10%);
+      background-color: color.adjust(#42b983, $lightness: -10%);
     }
   }
 }

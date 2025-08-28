@@ -12,7 +12,8 @@
 // Example usage of the variables from the imported file:
 body {
   font-family: variables.$font-family-base;
-  color: variables.$text-color;
+  //color: variables.$text-color;
+  color: orange;
   background-color: variables.$background-color;
 }
 
