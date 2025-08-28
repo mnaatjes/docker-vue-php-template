@@ -6,22 +6,31 @@
 ```
 .
 ├── docker-compose.yml
+│
 ├── .docker/
 │   ├── Dockerfile.php
 │   ├── Dockerfile.frontend
 │   └── 000-default.conf
+│
 ├── src/
 │   ├── public/
 │   │   ├── index.php
-│   │   └── ... your Vue.js build output
+│   │   └── ... 
 │   └── backend/
-│       └── ... your PHP files
-└── frontend/
-    ├── package.json
-    ├── vite.config.js
-    └── src/
-        ├── main.js
-        └── style.scss
+│       └── ... PHP files
+│
+├── frontend/
+│   ├── node_modules/ ... Created by Dockerfile.frontend
+│   ├── package.json
+│   ├── vite.config.js
+│   └── src/
+│       ├── main.js
+│       ├── App.vue
+│       ├── components/ ...Vue Components
+│       ├── styles/
+│       └── main.scss
+│
+└── .gitignore
 ```
 
 
