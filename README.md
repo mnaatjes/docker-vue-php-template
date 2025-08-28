@@ -212,7 +212,7 @@ For these files (`~/frontend/src/main.js` & `~/frontend/src/App.vue`) to work, y
       <script type="module" src="http://localhost:5173/src/main.js"></script>
   </body>
   </html>
-
+```
 
 ---
 
@@ -232,6 +232,7 @@ The frontend container uses Vite, which is a modern frontend build tool. Vite is
 * Import the main Sass file into Vue.js application file `~/frontend/src/main.js`
 
 * **Example SASS Directory Structure:**
+
 ```
 /frontend/
 ├── src/
@@ -419,6 +420,115 @@ services:
 
 # Appendix B: How-To's and Help
 
+## B.1 Changing the Port Number
+Changing the port to view the application requires modifying the docker-compose.yml file. You also need to check for port conflicts and select a valid port number.
+
+
+### B.1.0 Overview and Common Tasks in Workflow:
+This section contains commands and file locations common to all Service port changes.
+
+* **View all running Docker Containers and their ports:**
+```bash
+  docker ps 
+  docker compose ps
+```
+
+* **Choose a Port Number:**
+  * An acceptable range of ports to use are unregistered, non-system ports, typically ranging from 1024 to 49151. 
+  * A common practice for web development is to use ports in the 3000-9000 range, such as 3000, 8000, or 8080, as they are less likely to be in use.
+
+* **Change Port in `~/docker-compose/yml`:**
+  * To change the port for your application, you need to edit the ports mapping for the php service in your docker-compose.yml file. 
+  * The format is HOST_PORT:CONTAINER_PORT
+  * Find the port number in the associated service
+  * **Modified file:**
+  ```yaml
+    version: '3.8'
+
+  services:
+    php:
+      build:
+        context: .
+        dockerfile: ./.docker/Dockerfile.php
+      container_name: php
+      ports:
+        - "8000:80"  # <--- Change this line
+    ```
+
+### B.1.1 PHP Service Port Change
+
+Contains files and commands specific to altering the PHP Service Port Number
+
+  * **Modify docker-compose.yml under PHP Service:**
+  ```yaml
+    version: '3.8'
+
+  services:
+    php:
+      build:
+        context: .
+        dockerfile: ./.docker/Dockerfile.php
+      container_name: php
+      ports:
+        - "8000:80"  # <--- Change this line
+    ```
+
+* **Update the Vite Configuration:**
+  * Since your frontend service (Vite dev server) depends on the php service, you must also update the vite.config.js file to reflect the new host port for hot module reloading and correct asset serving.
+  * **Modified `~/frontend/vite.config.js` File:**
+  ```js
+    server: {
+      host: true,
+      origin: 'http://localhost:8000' # <--- Change this line
+    }
+  ```
+
+* **Rebuild and Run Containers:**
+
+```bash
+  docker compose up --build -d
+```
+
+Your PHP Service will now be accessible at http://localhost:8000.
+
+### B.1.1 Frontend Service Port Change
+Changing port mapping in docker-compose.yml and index.php
+
+* To change the port, simply change the first number in the ports mapping. The container port 5173 must remain unchanged as it's the internal port used by Vite. Let's change the host port to 3000.
+* **Modify docker-compose.yml:**
+```yml
+  services:
+    frontend:
+      build:
+        context: .
+        dockerfile: ./.docker/Dockerfile.frontend
+      container_name: frontend
+      volumes:
+        - ./frontend:/app
+        - /app/node_modules # Prevents host files from overwriting the container's dependencies
+      ports:
+        - "3000:5173" # <--- Change this line
+      command: npm run dev
+      tty: true
+```
+
+* **Modify the `~/src/public/index.php` file directly** 
+  * The index file references the web service port to load the Vue.js application. 
+  * You must update these references to use your new port.
+  * **Modified Index.php File:**
+  ```html
+    <body>
+      <div id="app"></div> <h1>Hello from PHP!</h1>
+
+      <script type="module" src="http://localhost:3000/@vite/client"></script>
+      <script type="module" src="http://localhost:3000/src/main.js"></script>
+  </body>
+  ```
+
+* **Rebuild Application:**
+```bash
+  docker compose up --build -d
+```
 
 ---
 
