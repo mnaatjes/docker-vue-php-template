@@ -40,15 +40,22 @@ The `~/frontend/src/main.js` file is the entry point of your Vue.js application.
 * **Example `~/frontend/src/main.js` File:**
 
 ```js
-    import { createApp } from 'vue' // Imports the function to create a Vue app
-    import App from './App.vue'     // Imports the main component
-    import './main.scss';           // Imports main sass file
+  /**
+   * @file ~/frontend/src/main.js
+   * @description The main entry point for the Vue.js application. This file imports the root Vue component,
+   * initializes the application instance, and mounts it to the DOM. It also imports the main SCSS file
+   * for global styling.
+   * @module Main
+   */
+  import { createApp } from 'vue' // Imports the function to create a Vue app
+  import App from './App.vue'     // Imports the main component
+  import './main.scss';           // Imports main sass file
 
-    // Creates the Vue application instance
-    const app = createApp(App);
+  // Creates the Vue application instance
+  const app = createApp(App);
 
-    // Mounts the app to the HTML element with the ID 'app'
-    app.mount('#app');
+  // Mounts the app to the HTML element with the ID 'app'
+  app.mount('#app');
 ```
 
 ## 2.2 App.vue Root Component
@@ -59,68 +66,80 @@ The `~/frontend/src/App.vue` file is the root component of your application.
 * **Example `~/frontend/src/App.vue` File:**
 
 ```vue
-    <template>
+  <template>
     <div id="vue-app">
-        <h1>Hello from Vue.js!</h1>
-        <p>This is your main application component.</p>
-        <button @click="incrementCount">Click me</button>
-        <p>Button was clicked {{ count }} times.</p>
+      <h1>Hello from Vue.js!</h1>
+      <p>This is your main application component.</p>
+      <button @click="incrementCount">Click me</button>
+      <p>Button was clicked {{ count }} times.</p>
+      
+      <Table :data="tableData" />
+      
     </div>
-    </template>
+  </template>
 
-    <script>
-    // The script section defines the component's logic, data, and methods.
-    import { ref } from 'vue';
+  <script>
+  import { ref } from 'vue';
+  // Import the new Table component
+  import Table from './components/Table.vue';
 
-    export default {
-    // Use the setup function for composition API
+  export default {
+    // Register the component
+    components: {
+      Table
+    },
     setup() {
-        const count = ref(0); // A reactive variable for the click count
-
-        const incrementCount = () => {
+      const count = ref(0);
+      
+      // Sample data for the table
+      const tableData = ref([
+        { id: 1, name: 'Alice', age: 25 },
+        { id: 2, name: 'Bob', age: 30 },
+        { id: 3, name: 'Charlie', age: 35 }
+      ]);
+      
+      const incrementCount = () => {
         count.value++;
-        };
+      };
 
-        // Return the reactive data and methods to be used in the template
-        return {
+      return {
         count,
-        incrementCount
-        };
+        incrementCount,
+        tableData
+      };
     }
-    };
-    </script>
+  };
+  </script>
 
-    <style lang="scss">
-    /*
-    The style section contains the CSS for this component.
-    The `lang="scss"` attribute tells Vite to process this as a Sass file.
-    */
-    #vue-app {
+  <style lang="scss">
+  @use 'sass:color';
+
+  #vue-app {
     font-family: Arial, sans-serif;
     text-align: center;
     margin-top: 60px;
     h1 {
-        color: #42b983;
+      color: #42b983;
     }
     button {
-        background-color: #42b983;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: background-color 0.3s;
-        &:hover {
-        background-color: darken(#42b983, 10%);
-        }
+      background-color: #42b983;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+      &:hover {
+        background-color: color.adjust(#42b983, $lightness: -10%);
+      }
     }
-    }
-    </style>
+  }
+  </style>
 ```
 
 ## 2.1 Index.html
@@ -131,19 +150,20 @@ For these files (`~/frontend/src/main.js` & `~/frontend/src/App.vue`) to work, y
 * **Example `~/src/public/index.html` File:**
 
 ```html
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>My Docker App</title>
-        <!-- Vite's script tag will automatically be injected here in dev mode -->
-    </head>
-    <body>
-        <div id="app"></div> <!-- This is where your Vue app will be rendered -->
-        <h1>Hello from PHP!</h1>
-    </body>
-    </html>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>My Docker App</title>
+  </head>
+  <body>
+      <div id="app"></div> <h1>Hello from PHP!</h1>
+      
+      <script type="module" src="http://localhost:5173/@vite/client"></script>
+      <script type="module" src="http://localhost:5173/src/main.js"></script>
+  </body>
+  </html>
 ```
 
 ## 2.2 Workflow
@@ -209,74 +229,74 @@ services:
     container_name: frontend
     volumes:
       - ./frontend:/app
+      - /app/node_modules # Prevents host files from overwriting the container's dependencies
+    ports:
+      - "5173:5173"
     command: npm run dev
     tty: true
-
 ```
 
 ## A.2 Dockerfiles and Configuration Files in .docker/
 
 ### A.2.1 Dockerfile.frontend
 ```bash
-FROM node:18-alpine
+  FROM node:18-alpine
 
-WORKDIR /app
+  WORKDIR /app
 
-# Copy package.json and package-lock.json to a separate layer for caching
-COPY ./frontend/package*.json ./
+  # Copy all project files to the container
+  COPY ./frontend .
 
-# Use `npm install` for more reliable dependency installation
-RUN npm install
+  # Install project dependencies
+  RUN npm install
 
-# Copy all other project files
-COPY ./frontend .
+  EXPOSE 5173
 
-EXPOSE 5173
+  CMD ["npm", "run", "dev"]
 
-CMD ["npm", "run", "dev"]
 
 ```
 
 ### A.2.3 Dockerfile.php
 ```bash
-FROM php:8.1-apache
+  FROM php:8.1-apache
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    libzip-dev \
-    unzip \
-    libpng-dev \
-    libjpeg-dev \
-    libonig-dev \
-    libxml2-dev \
-    && rm -rf /var/lib/apt/lists/*
+  # Install system dependencies
+  RUN apt-get update && apt-get install -y \
+      git \
+      libzip-dev \
+      unzip \
+      libpng-dev \
+      libjpeg-dev \
+      libonig-dev \
+      libxml2-dev \
+      && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql gd mbstring zip
+  # Install PHP extensions
+  RUN docker-php-ext-install pdo pdo_mysql gd mbstring zip
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+  # Install Composer
+  COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
+  WORKDIR /var/www/html
 
 ```
 
 ### A.2.3 000-default.conf
 ```bash
-<VirtualHost *:80>
-    ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/html/src/public
+  <VirtualHost *:80>
+      ServerAdmin webmaster@localhost
+      DocumentRoot /var/www/html/src/public
 
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+      ErrorLog ${APACHE_LOG_DIR}/error.log
+      CustomLog ${APACHE_LOG_DIR}/access.log combined
 
-    <Directory /var/www/html/src/public>
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
+      <Directory /var/www/html/src/public>
+          Options Indexes FollowSymLinks
+          AllowOverride All
+          Require all granted
+      </Directory>
+  </VirtualHost>
 
 ```
 
@@ -287,27 +307,29 @@ WORKDIR /var/www/html
 * **Location:** `~/src/vite.config.js`
 
 ```js
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+  import { fileURLToPath, URL } from 'node:url'
+  import { defineConfig } from 'vite'
+  import vue from '@vitejs/plugin-vue'
 
-export default defineConfig({
-  plugins: [
-    vue(),
-  ],
-  build: {
-    outDir: '../src/public', // This is important!
-    emptyOutDir: true,
-  },
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+  export default defineConfig({
+    plugins: [
+      vue(),
+    ],
+    build: {
+      outDir: '../src/public', // This is important!
+      emptyOutDir: true,
+    },
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    },
+    server: {
+      host: true, // This allows the container to be accessed from the host machine
+      origin: 'http://localhost:8085'
     }
-  },
-  server: {
-    host: true, // This allows the container to be accessed from the host machine
-  }
-})
+  })
+
 ```
 
 ## A.3.2 Package.json with Vite
@@ -315,23 +337,23 @@ export default defineConfig({
 * **Location:** `~/src/package.json`
 
 ```json
-{
-  "name": "my-frontend-app",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^4.2.3",
-    "sass": "^1.66.1",
-    "vite": "^4.4.5",
-    "vue": "^3.3.4"
+  {
+    "name": "my-frontend-app",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "preview": "vite preview"
+    },
+    "devDependencies": {
+      "@vitejs/plugin-vue": "^4.2.3",
+      "sass": "^1.66.1",
+      "vite": "^4.4.5",
+      "vue": "^3.3.4"
+    }
   }
-}
 
 ```
 
