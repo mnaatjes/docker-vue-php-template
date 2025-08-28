@@ -17,5 +17,6 @@ export default defineConfig({
   },
   server: {
     host: true, // This allows the container to be accessed from the host machine
+    origin: 'http://localhost:8085'
   }
 })

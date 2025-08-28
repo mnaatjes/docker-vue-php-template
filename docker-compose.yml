@@ -20,6 +20,8 @@ services:
     container_name: frontend
     volumes:
       - ./frontend:/app
+      - /app/node_modules # Prevents host files from overwriting the container's dependencies
+    ports:
+      - "5173:5173"
     command: npm run dev
     tty: true
-
