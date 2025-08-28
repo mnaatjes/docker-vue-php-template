@@ -1,0 +1,16 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package.json and package-lock.json to a separate layer for caching
+COPY ./frontend/package*.json ./
+
+# Use `npm install` for more reliable dependency installation
+RUN npm install
+
+# Copy all other project files
+COPY ./frontend .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

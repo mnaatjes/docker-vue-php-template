@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./.docker/Dockerfile.php
+    container_name: php
+    ports:
+      - "8085:80"
+    volumes:
+      - ./src/public:/var/www/html
+    depends_on:
+      - frontend
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./.docker/Dockerfile.frontend
+    container_name: frontend
+    volumes:
+      - ./frontend:/app
+    command: npm run dev
+    tty: true
+
