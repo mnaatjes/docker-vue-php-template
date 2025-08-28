@@ -32,6 +32,8 @@
 
 * **Overview and Concepts:**
 
+## 2.1 Entry Point: Main.js
+
 The `~/frontend/src/main.js` file is the entry point of your Vue.js application. 
 * It's the first file that gets executed when the app loads. 
 * Its primary job is to create the Vue app instance, import the main component (typically App.vue), and mount it to a specific HTML element in your index.php file.
@@ -48,6 +50,8 @@ The `~/frontend/src/main.js` file is the entry point of your Vue.js application.
     // Mounts the app to the HTML element with the ID 'app'
     app.mount('#app');
 ```
+
+## 2.2 App.vue Root Component
 
 The `~/frontend/src/App.vue` file is the root component of your application. 
 * It acts as the container for all other components and defines the main layout and functionality of your app. 
@@ -119,8 +123,30 @@ The `~/frontend/src/App.vue` file is the root component of your application.
     </style>
 ```
 
+## 2.1 Index.html
 
-## 2.1 Workflow
+For these files (`~/frontend/src/main.js` & `~/frontend/src/App.vue`) to work, you also need to ensure that your index.php (or index.html) file has an HTML element for the Vue app to mount to.
+
+* The vite build process will automatically detect the entry point in main.js and inject the necessary script tags into this file when you build for production, or serve the content for development.
+* **Example `~/src/public/index.html` File:**
+
+```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Docker App</title>
+        <!-- Vite's script tag will automatically be injected here in dev mode -->
+    </head>
+    <body>
+        <div id="app"></div> <!-- This is where your Vue app will be rendered -->
+        <h1>Hello from PHP!</h1>
+    </body>
+    </html>
+```
+
+## 2.2 Workflow
 
 
 ---
