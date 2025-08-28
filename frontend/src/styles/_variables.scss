@@ -1,0 +1,104 @@
+// =========================================================================
+// SASS Variables
+//
+// This file contains a collection of SASS variables for defining a
+// consistent style guide across a project.
+// =========================================================================
+
+// =========================================================================
+// 1. COLORS
+//    Defines the main color palette, including primary, secondary, and
+//    text/background colors.
+// =========================================================================
+
+// Brand Colors
+$primary-color:       #3498db; // A nice blue for primary actions and highlights
+$primary-light:       #5dade2; // Lighter shade of primary
+$primary-dark:        #21618c; // Darker shade of primary
+
+$secondary-color:     #2ecc71; // A vibrant green for secondary elements
+$secondary-light:     #58d68d; // Lighter shade of secondary
+$secondary-dark:      #1e8449; // Darker shade of secondary
+
+$accent-color:        #e74c3c; // A red for accents, warnings, or errors
+$accent-light:        #ec7063; // Lighter shade of accent
+$accent-dark:         #b03a2e; // Darker shade of accent
+
+// Neutral & Text Colors
+$light-grey:          #ecf0f1; // A very light grey for backgrounds
+$medium-grey:         #bdc3c7; // A medium grey for borders and separators
+$dark-grey:           #34495e; // A dark grey for text and headings
+$white:               #ffffff; // A pure white
+
+$text-color:          $dark-grey;
+$text-light-color:    $white;
+$background-color:    $light-grey;
+
+// =========================================================================
+// 2. TYPOGRAPHY
+//    Defines font families, sizes, weights, and line heights.
+// =========================================================================
+
+// Font Families
+$font-family-base:    'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-heading: 'Georgia', serif;
+
+// Font Weights
+$font-weight-light:   300;
+$font-weight-regular: 400;
+$font-weight-bold:    700;
+
+// Font Sizes (using a modular scale)
+$font-size-base:      1rem; // 16px by default
+$font-size-sm:        0.875rem; // ~14px
+$font-size-lg:        1.25rem; // ~20px
+
+$font-size-h1:        2.5rem; // ~40px
+$font-size-h2:        2rem;   // ~32px
+$font-size-h3:        1.75rem; // ~28px
+$font-size-h4:        1.5rem; // ~24px
+$font-size-h5:        1.25rem; // ~20px
+$font-size-h6:        1rem;   // ~16px
+
+// Line Height
+$line-height-base:    1.6;
+$line-height-heading: 1.2;
+
+// =========================================================================
+// 3. SPACING & LAYOUT
+//    Defines a consistent spacing scale for margins and padding, as well as
+//    layout-related variables.
+// =========================================================================
+
+// Spacing Scale
+$spacing-xs:          0.25rem; // 4px
+$spacing-sm:          0.5rem;  // 8px
+$spacing-md:          1rem;    // 16px
+$spacing-lg:          1.5rem;  // 24px
+$spacing-xl:          2rem;    // 32px
+$spacing-2xl:         3rem;    // 48px
+$spacing-3xl:         4rem;    // 64px
+
+// Max Container Width
+$max-width:           1200px;
+$padding-container:   1rem; // Padding for containers
+
+// =========================================================================
+// 4. BREAKPOINTS
+//    Defines breakpoints for responsive design.
+// =========================================================================
+
+$breakpoint-sm:       576px;  // Small devices (e.g., phones)
+$breakpoint-md:       768px;  // Medium devices (e.g., tablets)
+$breakpoint-lg:       992px;  // Large devices (e.g., desktops)
+$breakpoint-xl:       1200px; // Extra large devices (large desktops)
+
+// =========================================================================
+// 5. OTHER STYLES
+//    Defines other reusable style variables.
+// =========================================================================
+
+$border-radius:       8px;    // Rounded corners
+$box-shadow:          0 4px 6px rgba(0, 0, 0, 0.1); // Subtle shadow
+$transition-speed:    0.3s;   // Smooth transition speed
+$transition-ease:     ease-in-out;
