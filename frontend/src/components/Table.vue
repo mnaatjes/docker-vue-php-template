@@ -27,7 +27,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../styles/variables' as v;
+@use '../styles/abstracts/variables' as v;
 
 .table-container {
   margin: v.$spacing-xl 0;

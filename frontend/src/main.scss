@@ -7,7 +7,7 @@
 
 // Use the variables from the _variables.scss file. The "variables"
 // namespace is automatically created from the filename.
-@use 'styles/variables';
+@use './styles/abstracts/variables';
 
 // Example usage of the variables from the imported file:
 body {
