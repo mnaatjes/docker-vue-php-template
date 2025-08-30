@@ -242,8 +242,6 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
   import them all.
 
 
-
-
 * **SASS Directory Structure:**
 
 ```
@@ -262,20 +260,21 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 │       │   ├── _typography.scss # Rules (h1, p, etc.)
 │       │   └── _base.scss # Base style for common elements
 │       ├── components/
-│       │   ├──
-│       │   └──
+│       │   ├── _button.scss
+│       │   ├── _card.scss
+│       │   └── _navigation.scss
 │       ├── layout/
-│       │   ├──
-│       │   └──
+│       │   ├── _header.scss
+│       │   ├── _footer.scss
+│       │   └── _grid.scss # Grid System
 │       ├── pages/
-│       │   ├──
-│       │   └──
+│       │   ├── _home.scss 
+│       │   └── _contact.scss
 │       ├── themes/
-│       │   ├──
-│       │   └──
+│       │   ├── _dark.scss
+│       │   └── _light.scss
 │       ├── vendors/
-│       │   ├──
-│       │   └──
+│       │   └── _bootstrap.scss # Third-party library
 │       └── main.scss
 ```
 
@@ -285,9 +284,16 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 **Placeholders:**
 - What are placeholders and what goes in the `./abstract/placeholders/` file?
 
+* **Placeholder:** special type of selector in SASS that looks and acts like a class but begins with `%`
+
+* **A "Silent Class"** Rulesets that use placeholder selector will **not** be rendered into final CSS unless placeholder is explicitly `@extended`
+
+
+
 
 ### 3.1.3 Base
 - What is the `base/` directory for and what does the name mean?
+
 
 
 - What is resetting / normalization and what is it not?
@@ -298,12 +304,20 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 
 
 ### 3.1.4 Components
+- Why is `_button.scss` not plural? Is there just one button document for the entire site? Where do styles for states of the button go (e.g. hover, active, etc...)?
+
 
 ### 3.1.5 Layout
+- If you aren't using a "grid system" or you are using flex or another layout - what do you call the document?
+
 
 ### 3.1.6 Pages
+- What is considered a page? How are semantic tags used for styling?
+
 
 ### 3.1.7 Themes
+- Is all that goes in just "light" and "dark" or is there more to the `_themes.scss` file?
+
 
 ### 3.1.8 Vendors
 - What are common vendors to use with sass?
@@ -311,6 +325,65 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 - How are vendors installed / pulled?
 
 - How are vendors applied / @use and imported?
+
+
+## 3.2 Main.scss
+The `main.scss` file acts as the single entry point and imports all the partials in a **specific** order. This order also structures dependencies with the last import being the **most dependent** on the sass framework.
+
+### 3.2.1 Import Order
+* Abstracts (no CSS Output)
+* Vendors
+* Base
+* Layout
+* Components
+* Pages
+* Themes
+
+## 3.3 Rules and Best Practices
+
+### 3.3.1 General Overview
+Common Rules and Practices
+
+* **Avoid Global Scope** with mixins, variables, and functions by using namespaces
+
+* **Use Explicit Dependencies**
+
+* **@import Depreciated:**
+```sass
+  @use 'abstracts/variables' as var;
+```
+
+* **Keep Nesting Shallow:** Use the "Inception Rule", don't go more than 3 levels deep:
+```sass
+  .nav_list{} // <-- This
+  .nav{ ul{ li{} }} <-- Not This
+```
+
+* **DRY: Do Not Repeat Yourself!**
+
+### 3.3.2 Common Tasks
+- How to use a namespace with variables, mixins, etc...?
+
+- What does "Explicit Dependencie: It's clear which partials are being used" mean?
+
+
+### 3.3.3 Variable Rules
+* **Store Reusable Values** like color, fonts, spacing units in central `_variables.scss`
+
+### 3.3.4 Mixin Rules
+* **Use for repeating patterns of CSS:** 
+  * Expecially those that take arguments (parameters).
+  * Common use for media queries
+
+- What are some other common uses for mixins and best practices?
+
+
+## 3.4 Naming Conventions
+
+### 3.4.1 Class Names with BEM: Block Element Modifier 
+* `.block` A standalone component, e.g. `.card` or `.nav`
+* `.block__element` A part of a block, e.g. `card__title`
+* `.block--modifier` A different state or version, e.g. `.card--dark`, `.nav--sticky`
 
 
 
