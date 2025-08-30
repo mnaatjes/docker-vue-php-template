@@ -231,7 +231,20 @@ The frontend container uses Vite, which is a modern frontend build tool. Vite is
 * Create Sass document within `~/frontend/styles/...` Directory (See Below)
 * Import the main Sass file into Vue.js application file `~/frontend/src/main.js`
 
-* **Example SASS Directory Structure:**
+
+### 3.1.1 SASS Project Structure and Organization
+This contains overview of SASS project structure, best practices, variables, functions, and mixins
+
+**7-1 Patterns:**
+The most popular and effective way to structure a SASS project is the "7-1 Pattern": 
+* 7 folders for your partial files
+* 1 main.scss file to
+  import them all.
+
+
+
+
+* **SASS Directory Structure:**
 
 ```
 /frontend/
@@ -239,10 +252,66 @@ The frontend container uses Vite, which is a modern frontend build tool. Vite is
 │   ├── main.js
 │   ├── App.vue
 │   └── styles/
-│       ├── _variables.scss
-│       ├── _mixins.scss
+│       ├── abstracts/
+│       │   ├── _variables.scss #All Sass Variables
+│       │   ├── _funcitons.scss
+│       │   ├── _mixins.scss
+│       │   └── _placeholders.scss # Placeholder Selectors
+│       ├── base/
+│       │   ├── _reset.scss # Reset / Normalize Styles 
+│       │   ├── _typography.scss # Rules (h1, p, etc.)
+│       │   └── _base.scss # Base style for common elements
+│       ├── components/
+│       │   ├──
+│       │   └──
+│       ├── layout/
+│       │   ├──
+│       │   └──
+│       ├── pages/
+│       │   ├──
+│       │   └──
+│       ├── themes/
+│       │   ├──
+│       │   └──
+│       ├── vendors/
+│       │   ├──
+│       │   └──
 │       └── main.scss
 ```
+
+
+### 3.1.2 Abstracts
+
+**Placeholders:**
+- What are placeholders and what goes in the `./abstract/placeholders/` file?
+
+
+### 3.1.3 Base
+- What is the `base/` directory for and what does the name mean?
+
+
+- What is resetting / normalization and what is it not?
+
+- What is considered a "typography rule"? What goes in the `_typography.scss` file and what doesn't?
+
+- What goes in the `_base.scss` file? What is meant by "common elements"
+
+
+### 3.1.4 Components
+
+### 3.1.5 Layout
+
+### 3.1.6 Pages
+
+### 3.1.7 Themes
+
+### 3.1.8 Vendors
+- What are common vendors to use with sass?
+
+- How are vendors installed / pulled?
+
+- How are vendors applied / @use and imported?
+
 
 
 ---
