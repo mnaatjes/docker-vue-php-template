@@ -55,6 +55,8 @@ This Template Repository contains the directory structure, variable, function, m
 
 ### 2.2 Best Practices
 
+#### 2.2.1 Overview
+
 **7-1 Patterns:**
 The most popular and effective way to structure a SASS project is the "7-1 Pattern":
 
@@ -64,11 +66,36 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 **Separation of Concerns**
 It's not just that you *can* add properties to the same tag in multiple files—it's that you **should**. Each file has a different purpose and level of specificity.
 
+#### 2.2.2 General Practices
+
+- **Avoid Global Scope** with mixins, variables, and functions by using namespaces
+- **Use Explicit Dependencies**
+- **@import Depreciated:**
+
+  ```sass
+    @use 'abstracts/variables' as var;
+  ```
+
+- **DRY: Do Not Repeat Yourself!**
+- **Keep Nesting Shallow:** Use the "Inception Rule", don't go more than 3 levels deep:
+
+```sass
+  .nav_list{} // <-- This
+  .nav{ ul{ li{} }} <-- Not This
+```
+
+- **Utilize Class Names with BEM: Block Element Modifiers**
+  - `.block` A standalone component, e.g. `.card` or `.nav`
+  - `.block__element` A part of a block, e.g. `card__title`
+  - `.block--modifier` A different state or version, e.g. `.card--dark`, `.nav--sticky`
+
 ---
 
 ## 3.0 Directories, Files, and Namespaces
 
-### 3.1 Best Practices
+### 3.1 Overview
+
+See Directory Structure section for entire mapping.
 
 ### 3.2 Abstracts Directory
 
@@ -145,6 +172,91 @@ It's not just that you *can* add properties to the same tag in multiple files—
 - **Sizes:** `max-width, height`
 - **Litmus:** *Might I ever want to change this value?*
 
+#### 3.2.3 `abstracts/_mixins.scss`
+
+**A Mixin** is like a *function* in CSS used to define a *block of styles* that can be reused anywhere.
+
+*When to use a **mixin** vs a **placeholder**?*
+
+- **Use Mixin (@mixin / @include) when:**
+
+  - You need to pass an argument
+  
+  ```sass
+    @mixin flex-center($direction: row){
+      flex-direction: $direction;
+    }
+  ```
+
+  - Working within a `scoped` component i.e. Vue or React and all the component's styles should be self-contained.
+  - Use for **dynamic** and **parameter-driven** styles. Generally safer and more versatile.
+  - Does it need an argument: @mixin
+  - Working in a module system: @mixin
+
+- **Use Placeholders (% / @extend) when:**
+  - You have a static set of styles
+  - Selectos have a clear *Semantic Relationship* with the classes that utilize it:
+  
+  ```sass
+    // placeholder
+    %button-base {}
+    // classes
+    .button-primary {}
+    .button-secondary {}
+  ```
+
+  - Use for sharing fixed set of styles among related elements to produce smallest possible CSS.
+  - Working with shared styles for different states: use a placeholder
+  - **Use for repeating patterns of CSS:** Expecially those that take arguments (parameters). Common use for media queries
+
+*How are `@mixin`s implemented?*
+
+- Use the `@include` keyword:
+
+```sass
+  // definition
+  // abstracts/_mixins.scss
+
+  @mixin flex-center($direction row) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: $direction;
+  }
+
+  // implementation
+  // components/_login.scss
+  .login-container {
+    @include flex-center(column);
+  }
+```
+
+*How are `@mixin`s used?*
+
+- **Usage:** Helpful for media-queries or any styles that require a parameter or when yo uneed to use the `@content` directive.
+- **Default Values** Always provide defaults parameter values when using mixins
+- Can **pass parameter values by name** instead of in-order:
+
+  ```sass
+    // definition
+    @mixin someThing($direction row, $radius 2rem)
+
+    // Usage
+    @include someThing($radius: 1rem, $direction: column)
+  ```
+
+#### 3.2.4 `abstracts/_functions.scss`
+
+**Functions:** are pieces of reusable code to perform *calcualtions* or *actions* and returns a *single* value
+
+- Where a `@mixin` returns a block of code, a `@function` returns a single value.
+- More like a spreadsheet formula than a javascript function
+- Can import using a **Namespace**, e.g. `@use 'abstracts/functions' as f` and then implemented `font-size: f.someFunc(value);`
+
+**Implementation:** Declare the function with the `@function <functionName>($argument default-value){...logic}`
+
+- **Usage:** Use to place the value produced by the function directly into the CSS property: `property: functionName(parameter-value);`
+
 ### 3.3 Base Directory
 
 *What is the `base/` directory for and what does the name mean?*
@@ -195,9 +307,9 @@ It's not just that you *can* add properties to the same tag in multiple files—
 - **Example:** <https://necolas.github.io/normalize.css/>
 - **Refrain** from using `_variables.scss` in `_reset.scss`
 
-#### 3.3.3 `base/_typography.scss
+#### 3.3.3 `base/_typography.scss`
 
-- The **_typocraphy.scss** Defines the default appearance of all text elements like `<h1>, <p>, <a>` etc. Can define `color`, `line-height`, `font-size`, and `font-family`
+The **_typocraphy.scss** Defines the default appearance of all text elements like `<h1>, <p>, <a>` etc. Can define `color`, `line-height`, `font-size`, and `font-family`
 
 *What is considered a "typography rule"? What goes in the `_typography.scss` file and what doesn't?*
 
@@ -210,80 +322,64 @@ It's not just that you *can* add properties to the same tag in multiple files—
 - Holds typographic definitions for child elements, NOT `<html> or <body>` elements
 
 - **Follow the Reset --> Style Pattern**
-  * Separation ensures you are always building upon a consistent foundation
+  - Separation ensures you are always building upon a consistent foundation
   - **Example:** reset inconsistent margins then in `_typography.scss` add back exact properties desired
 
 - **_base.scss** Catch-all for other base styles applied to `<html> or <body>` elements such as `box-sizing`, `border-box`, `background-colors`...
 
   - **Single Responsibility Principle:** `_base.scss` is responsible for the specific rules governing **all** typofraphic elements
-  * Set global defaults on the parent - even for typography attributes - in `_base.scss` 
-  * Developer expects to check `_base.scss` for default behaviors
+  - Set global defaults on the parent - even for typography attributes - in `_base.scss` 
+  - Developer expects to check `_base.scss` for default behaviors
 
+### 3.4 Components
 
-## 3.4 Components
-- Is there just one button document for the entire site? Where do styles for states of the button go (e.g. hover, active, etc...)?
+*Is there just one button document for the entire site? Where do styles for states of the button go (e.g. hover, active, etc...)?*
 
-  - **Button States:** The styles for states like :hover, :active, and :focus go in the same file. Sass's nesting feature is perfect for this, as it keeps state-related styles logically grouped with the base component styles.
+- **Button States:** The styles for states like :hover, :active, and :focus go in the same file. Sass's nesting feature is perfect for this, as it keeps state-related styles logically grouped with the base component styles.
 
-  - **One File:** Goal is to have on efile to define the `<button>` element and classes like `.btn-primary, .btn-lrg` etc.
+- **One File:** Goal is to have on efile to define the `<button>` element and classes like `.btn-primary, .btn-lrg` etc.
 
+*What goes in `components/` directory?*
 
-- What goes in `components/` directory?
+- **Reusable** components able to be dropped anywhere on a site.
+- **Self-Contained** component styles should not depend on or *leak* out and affect other elements.
+- **Examples:** `_buttons.scss, _cards.scss, _forms.scss, _navbar.scss, _accordion.scss, _tooltips.scss`
 
-  - **Reusable** components able to be dropped anywhere on a site.
+*What **does not** go in the `components/` directory?*
 
-  - **Self-Contained** component styles should not depend on or *leak* out and affect other elements.
-
-  - **Examples:** `_buttons.scss, _cards.scss, _forms.scss, _navbar.scss, _accordion.scss, _tooltips.scss`
-
-- What **does not** go in the `components/` directory?
-
-  - **No *Boilerplate*** styles that belone in `_reset.scss or _base.scss`
-
-  - **Layout Styles:** Styles for the *major structural elements* should **not** be in `components/` and instead belong in `layout`. Examples of this are: `_header.scss, _sidebar.scss, grid.scss (.container, .row, .col)`
-
-  - **Pages** Styles for `_home.scss`, etc
+- **No *Boilerplate*** styles that belone in `_reset.scss or _base.scss`
+- **Layout Styles:** Styles for the *major structural elements* should **not** be in `components/` and instead belong in `layout`. Examples of this are: `_header.scss, _sidebar.scss, grid.scss (.container, .row, .col)`
+- **Pages** Styles for `_home.scss`, etc
 
 ## 3.5 Layout
-- If you aren't using a "grid system" or you are using flex or another layout - what do you call the document?
 
-  * Use a common descriptive name for the primary layout and structural styles. **Examples:** `_layout.scss`, `_flexbox.scss`, etc.
+*If you aren't using a "grid system" or you are using flex or another layout - what do you call the document?*
 
-  - **Major Structural / Semantic Elements** belong in the `layouts/` directory. 
-    - **Examples:** `_header.scss, _sidebar.scss`.
-    * These major elements should contain **all** of the style properties for the element (not just layout related properties).
-    * These layout elements are considered non-reusable, *macro-components* which appear in *one* context.
-    - **Exception:** When styling the *theme* of the `_header.scss`, those pertient styles belong in the `themes/` directory
+- Use a common descriptive name for the primary layout and structural styles. **Examples:** `_layout.scss`, `_flexbox.scss`, etc.
 
+- **Major Structural / Semantic Elements** belong in the `layouts/` directory. 
+  - **Examples:** `_header.scss, _sidebar.scss`.
+    - These major elements should contain **all** of the style properties for the element (not just layout related properties).
+    - These layout elements are considered non-reusable, *macro-components* which appear in *one* context.
+  - **Exception:** When styling the *theme* of the `_header.scss`, those pertient styles belong in the `themes/` directory
 
-## 3.6 Pages
-- What is considered a page? 
+### 3.6 Pages
 
-  - **Unique and Specific** to *one page only*
+*What is considered a page?*
 
-  - **Non-reusable** styles or for *overriding* default look of a `component/_layout.scss` block
+- **Unique and Specific** to *one page only*
+- **Non-reusable** styles or for *overriding* default look of a `component/_layout.scss` block
+- **Structural / Semantic Elements *Specific* to a *Page*:** For instance, if the `<header>` element (set in `layout/_header.scss`) requires a change of background property for the "about" or "home" page.
 
-  - **Structural / Semantic Elements *Specific* to a *Page*:** For instance, if the `<header>` element (set in `layout/_header.scss`) requires a change of background property for the "about" or "home" page.
+### 3.7 Themes
 
-## 3.7 Themes
-- Is all that goes in just "light" and "dark" or is there more to the `_themes.scss` file?
+**Theme:** A collection of *global* variables and styles controlling the aesthetic of the site 
 
-  - **Defining Swappable *Skins*** Aside from "light" or "dark" themes; i.e. **User-Choice** themes.
-
-  - **Branding** themes; e.g. the site hosts projects from different companies - a "Google" theme in `themes/_google.scss`
-
-  - **Accesibiity:** for instance, a *High-Contrast* color palette.
-
-
-- **Theme:** A collection of *global* variables and styles controlling the aesthetic of the site 
-
-  - **Separates the Core Structure** and layouts of components from their visual finish
-
-  * Fulfills the role of a **Dynamic Theming System** instead of a *Static Design System*
-
+- **Separates the Core Structure** and layouts of components from their visual finish
+- Fulfills the role of a **Dynamic Theming System** instead of a *Static Design System*
 - **Examples:**
 
-  * `themes/_config.scss` for defining the "light" theme:
+  - `themes/_config.scss` for defining the "light" theme:
 
   ```sass
     // Root defines the light theme variables by default
@@ -292,7 +388,7 @@ It's not just that you *can* add properties to the same tag in multiple files—
     }
   ```
 
-  * `themes/_dark.scss` for defining "dark" theme:
+  - `themes/_dark.scss` for defining "dark" theme:
 
   ```sass
     // Class defines dark theme
@@ -310,155 +406,46 @@ It's not just that you *can* add properties to the same tag in multiple files—
     }
   ```
 
+*Is all that goes in just "light" and "dark" or is there more to the `_themes.scss` file?*
 
-## 3.8 Vendors
-- What are common vendors to use with sass?
+- **Defining Swappable *Skins*** Aside from "light" or "dark" themes; i.e. **User-Choice** themes.
+- **Branding** themes; e.g. the site hosts projects from different companies - a "Google" theme in `themes/_google.scss`
+- **Accesibiity:** for instance, a *High-Contrast* color palette.
 
-- How are vendors installed / pulled?
+### 3.8 Vendors
 
-- How are vendors applied / @use and imported?
+### 3.9 Main.scss
 
-
-## 3.9 Main.scss
 The `main.scss` file acts as the single entry point and imports all the partials in a **specific** order. This order also structures dependencies with the last import being the **most dependent** on the sass framework.
 
-**Import Order**
-* Abstracts (no CSS Output)
-* Vendors
-* Base
-* Layout
-* Components
-* Pages
-* Themes
+**Import Order:**
 
-## 3.10 Rules and Best Practices
-Common Rules and Practices
+- Abstracts (no CSS Output)
+- Vendors
+- Base
+- Layout
+- Components
+- Pages
+- Themes
 
-- **Avoid Global Scope** with mixins, variables, and functions by using namespaces
+## 4.0 SASS Build-Ins Used within Template
 
-- **Use Explicit Dependencies**
+### 4.1 SASS Functions
 
-- **@import Depreciated:**
-```sass
-  @use 'abstracts/variables' as var;
-```
+**Common Functions:**
 
-- When to use a **mixin** vs a **placeholder**?
+- **Color:** `lighten(), darken(), saturate(), mix()`
+- **Number:** `random(), ceil(), floor()`
+- **String:** `str-length(), to-upper-case()`
+- **Map | List:** `map-get(), nth(), append()`
 
-- **Use Mixin (@mixin / @include) when:**
-  * You need to pass an argument
-  ```sass
-    @mixin flex-center($direction: row){
-      flex-direction: $direction;
-    }
-  ```
+#### 4.1.1 Color Functions
 
-  * Working within a `scoped` component i.e. Vue or React and all the component's styles should be self-contained.
-
-  * Use for **dynamic** and **parameter-driven** styles. Generally safer and more versatile.
-
-  * Does it need an argument: @mixin
-
-  * Working in a module syste,: @mixin
-
-- **Use Placeholders (% / @extend) when:**
-  * You have a static set of styles
-  * Selectos have a clear *Semantic Relationship* with the classes that utilize it:
-  ```sass
-    // placeholder
-    %button-base {}
-    // classes
-    .button-primary {}
-    .button-secondary {}
-  ```
-
-  * Use for sharing fixed set of styles among related elements to produce smallest possible CSS.
-
-  * Working with shared styles for different states: use a placeholder
-
-- **Keep Nesting Shallow:** Use the "Inception Rule", don't go more than 3 levels deep:
-```sass
-  .nav_list{} // <-- This
-  .nav{ ul{ li{} }} <-- Not This
-```
-
-- **DRY: Do Not Repeat Yourself!**
-
-- How to use a namespace with variables, mixins, etc...?
-
-
-## 3.12 Mixins
-
-- **A Mixin** is like a *function* in CSS used to define a *block of styles* that can be reused anywhere.
-
-- **Use for repeating patterns of CSS:** 
-  * Expecially those that take arguments (parameters).
-  * Common use for media queries
-
-- **Implemented:** Use the `@include` keyword:
-
-  ```sass
-    // definition
-    // abstracts/_mixins.scss
-
-    @mixin flex-center($direction row) {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: $direction;
-    }
-
-    // implementation
-    // components/_login.scss
-    .login-container {
-      @include flex-center(column);
-    }
-  ```
-
-- **Usage:** Helpful for media-queries or any styles that require a parameter or when yo uneed to use the `@content` directive.
-
-- **Default Values** Always provide defaults parameter values when using mixins
-
-* Can **pass parameter values by name** instead of in-order:
-
-  ```sass
-    // definition
-    @mixin someThing($direction row, $radius 2rem)
-
-    // Usage
-    @include someThing($radius: 1rem, $direction: column)
-  ```
-
-## 3.13 Functions
-
-- **Functions:** are pieces of reusable code to perform *calcualtions* or *actions* and returns a *single* value
-
-  * Where a `@mixin` returns a block of code, a `@function` returns a single value.
-
-  * More like a spreadsheet formula than a javascript function
-
-  * Can import using a **Namespace**, e.g. `@use 'abstracts/functions' as f` and then implemented `font-size: f.someFunc(value);`
-
-- **Implementation:** Declare the function with the `@function <functionName>($argument default-value){...logic}`
-
-- **Usage:** Use to place the value produced by the function directly into the CSS property: `property: functionName(parameter-value);`
-
-
-## 3.14 SASS Built-in Methods
-
-- **Common Functions:** 
-  - **Color:** `lighten(), darken(), saturate(), mix()`
-  - **Number:** `random(), ceil(), floor()`
-  - **String:** `str-length(), to-upper-case()`
-  - **Map | List:** `map-get(), nth(), append()`
-
-
-### 3.14.1 Color Methods
 Suite of SASS functions allowing adjustment of color properties like lightness, hue, saturation.
 
 - **Importing:** `@use 'sass:color';` makes *all* of the color functions available.
-
 - **Usage Example:** to lighten a color
+
   ```sass
     @use 'sass:color' as color;
     .btn-primary {
@@ -469,20 +456,17 @@ Suite of SASS functions allowing adjustment of color properties like lightness, 
     }
   ```
 
+#### 4.1.2 Map and List Methods
 
-### 3.14.2 Map and List Methods
+**Sass Lists:** An ordered sequence of values
 
-- **Sass Lists:**
-  * An ordered sequence of values
-  ```sass
-    $font-stack: 'Helvetica, Arial, sans-serif'; // comma separated
-    $padding-values: '1px 3px 5px'; //space separated
+```sass
+  $font-stack: 'Helvetica, Arial, sans-serif'; // comma separated
+  $padding-values: '1px 3px 5px'; //space separated
+```
 
-  ```
-
-  - **Delimiters:** Can be space or comma separated
-
-  - **Usage:** Great for an ordered sequence of values; especially when iterating.
+- **Delimiters:** Can be space or comma separated
+- **Usage:** Great for an ordered sequence of values; especially when iterating.
 
   ```sass
     // Iteration
@@ -499,50 +483,47 @@ Suite of SASS functions allowing adjustment of color properties like lightness, 
     $second: list.nth($letters, 2); // Returns 'b'
 
   ```
+  
+- **Importing:** `@use sass:list`;
 
-  - **Importing:** `@use sass:list`;
+**SASS Maps:** A collection of **key-value pairs** similar to a PHP Associative Array or Javascript Object
 
-- **SASS Maps:**
-  * Collection of **key-value pairs** similar to a PHP Associative Array or Javascript Object
+- **Syntax:**
 
-  - **Syntax:**
-  ```sass
-    $breakpoints: (
-      'sm': 576px,
-      'md': 768px,
-      'lg': 992px
-    );
-  ```
+```sass
+  $breakpoints: (
+    'sm': 576px,
+    'md': 768px,
+    'lg': 992px
+  );
+```
 
-  - **Usage:**
-  ```sass
-    // Import
-    @use 'sass:map';
+- **Usage:**
 
-    // Check if breakpoint name exists
-    @if map.has-key($breakpoints, 'sm') {...}
-  ```
+```sass
+  // Import
+  @use 'sass:map';
 
-## 3.15 Class Names with BEM: Block Element Modifier 
-* `.block` A standalone component, e.g. `.card` or `.nav`
-* `.block__element` A part of a block, e.g. `card__title`
-* `.block--modifier` A different state or version, e.g. `.card--dark`, `.nav--sticky`
+  // Check if breakpoint name exists
+  @if map.has-key($breakpoints, 'sm') {...}
+```
 
+### 4.2 SASS Directives and Tags Used within Template
 
+**`@error`** Intentionally *stops* the entire SASS compilation process and prints an error message to the console.
 
-## 3.16 SASS Directive Tags
+- Acts as a *guardrail* preventing invalid CSS
+- **Example:**
 
-- **`@error`** Intentionally *stops* the entire SASS compilation process and prints an error message to the console.
-  * Acts as a *guardrail* preventing invalid CSS
-  - **Example:**
-  ```sass
-    @error "Unknown Value in #{$color-name}";
-  ```
+```sass
+  @error "Unknown Value in #{$color-name}";
+```
 
-- **`@use`** Imports or loads module files
+**`@use`** Imports or loads module files
 
-- **`@forward`** Partner to `@use`. It loads a SASS file and makes its members available to any other file that uses (implements `@use`) the current file.
-  - **Usage:** Useful for creating a router-like file to collect and then forward constituent files.
+**`@forward`** Partner to `@use`. It loads a SASS file and makes its members available to any other file that uses (implements `@use`) the current file.
+
+- **Usage:** Useful for creating a router-like file to collect and then forward constituent files.
 
   ```sass
     // components/_button.scss
@@ -563,13 +544,13 @@ Suite of SASS functions allowing adjustment of color properties like lightness, 
     // Includes both _cards.scss and button.scss
 
   ```
-- **`@if | @else`**
 
-- **`@each`**
+**`@if | @else`**
 
+**`@each`**
 
-- **`@debug`**
+**`@debug`**
 
-- **`@warn`**
+**`@warn`**
 
 ---
