@@ -6,7 +6,7 @@
     <title>My Docker App</title>
 </head>
 <body>
-    <div id="app"></div> <h1>Hello from PHP!</h1>
+    <div id="app"></div>
     
     <script type="module" src="http://localhost:5173/@vite/client"></script>
     <script type="module" src="http://localhost:5173/src/main.js"></script>

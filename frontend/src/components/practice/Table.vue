@@ -27,14 +27,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../styles/variables' as v;
+@use '../../styles/variables' as v;
 
 .table-container {
   margin: v.$spacing-xl 0;
 }
 
 table {
-  width: 100%;
+  width: 400px;
   border-collapse: collapse;
   margin: 0 auto;
   font-family: v.$font-family-base;
@@ -44,6 +44,13 @@ th, td {
   padding: v.$spacing-md;
   text-align: left;
   border-bottom: 1px solid v.$medium-grey;
+}
+
+th:first-child {
+  border-top-left-radius: 1rem;
+}
+th:last-child {
+  border-top-right-radius: 1rem;
 }
 
 th {
@@ -59,5 +66,6 @@ tr:nth-child(even) {
 tr:hover {
   background-color: v.$medium-grey;
   cursor: pointer;
+  color: #f9f9f9;
 }
 </style>

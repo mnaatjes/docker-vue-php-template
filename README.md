@@ -631,3 +631,37 @@ Forces Docker Compose to stop and recreate all containers, even if their configu
 ```bash
   docker compose up --force-recreate
 ```
+
+# Appendix D: Vue.js Properties and Methods
+
+## D.1 Options API
+props, data(), and methods are key options within the Options API of a Vue component's export default object. They serve distinct purposes for managing a component's behavior and state.
+
+**props**
+* props are used to define the custom attributes that a component can receive from its parent component. 
+* They provide a way for data to be passed down from a parent to a child. 
+* Props are read-only for the child component, which prevents a child from accidentally changing the parent's state.
+* Purpose: To pass data down to a component.
+* Example:
+```js
+
+```
+
+**data()**
+* data() is a function that returns an object containing the component's reactive state. 
+* The properties inside this object are the component's internal data, and any changes to them will automatically trigger a re-render of the component's template. 
+* Each component instance gets its own copy of this data.
+* Purpose: To define the internal state of a component.
+* Example:
+```js
+
+```
+
+**methods**
+* methods is an object that contains all the functions or methods you want to use within your component. 
+* These methods are typically used to handle user interactions (like a button click) or to perform business logic that modifies the component's data.
+* Purpose: To define functions that perform actions or update the component's state.
+* Example:
+```js
+
+```
