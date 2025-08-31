@@ -8,6 +8,7 @@
 // Use the variables from the _variables.scss file. The "variables"
 // namespace is automatically created from the filename.
 @use './styles/abstracts/variables';
+@use './styles/abstracts/placeholders';
 
 // Example usage of the variables from the imported file:
 body {
@@ -28,4 +29,11 @@ h1 {
   background-color: variables.$primary-color;
   color: variables.$text-light-color;
   box-shadow: variables.$box-shadow;
+}
+
+
+// Debugging
+.message-error {
+  @extend %message-base;
+  color: red;
 }

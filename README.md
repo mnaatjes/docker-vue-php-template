@@ -288,7 +288,23 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 
 * **A "Silent Class"** Rulesets that use placeholder selector will **not** be rendered into final CSS unless placeholder is explicitly `@extended`
 
+* The **`abstracts/_placeholders.scss`** file contains defined, reusable, non-outputting blocks of CSS properties.
 
+* **Cannot use namespaces:** When including `@use abstracts/placeholders` cannot declare a namespace like `as x`. 
+
+* **Examples:**
+  * A base style for all message boxes:
+  ```sass
+    // ._placeholders.scss definitions
+    %message-base {
+      border: 1px solid;
+      padding: 1rem;
+      font-size: 0.75rem
+    }
+
+    // usage
+    .some-class {@extend %message-base;}
+  ```
 
 
 ### 3.1.3 Base
@@ -352,6 +368,39 @@ Common Rules and Practices
 ```sass
   @use 'abstracts/variables' as var;
 ```
+
+- When to use a **mixin** vs a **placeholder**?
+
+* **Use Mixin (@mixin / @include) when:**
+  * You need to pass an argument
+  ```sass
+    @mixin flex-center($direction: row){
+      flex-direction: $direction;
+    }
+  ```
+
+  * Working within a `scoped` component i.e. Vue or React and all the component's styles should be self-contained.
+
+  * Use for **dynamic** and **parameter-driven** styles. Generally safer and more versatile.
+
+  * Does it need an argument: @mixin
+
+  * Working in a module syste,: @mixin
+
+* **Use Placeholders (% / @extend) when:**
+  * You have a static set of styles
+  * Selectos have a clear *Semantic Relationship* with the classes that utilize it:
+  ```sass
+    // placeholder
+    %button-base {}
+    // classes
+    .button-primary {}
+    .button-secondary {}
+  ```
+
+  * Use for sharing fixed set of styles among related elements to produce smallest possible CSS.
+
+  * Working with shared styles for different states: use a placeholder
 
 * **Keep Nesting Shallow:** Use the "Inception Rule", don't go more than 3 levels deep:
 ```sass

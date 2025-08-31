@@ -4,7 +4,7 @@
     <p>This is your main application component.</p>
     <button @click="incrementCount">Click me</button>
     <p>Button was clicked {{ count }} times.</p>
-    
+    <Test></Test>
     <Table :data="tableData" />
     
   </div>
@@ -14,11 +14,13 @@
 import { ref } from 'vue';
 // Import the new Table component
 import Table from './components/Table.vue';
+import Test from './components/Test.vue';
 
 export default {
   // Register the component
   components: {
-    Table
+    Table,
+    Test
   },
   setup() {
     const count = ref(0);
