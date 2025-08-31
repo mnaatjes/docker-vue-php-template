@@ -56,11 +56,7 @@ This Template Repository contains the directory structure, variable, function, m
 - Works like any other repository
 - To share updates with *already created projects* you must update that project using the remote
 
-### 2.1 Workflows
-
-#### 2.1.2 Creating a Remote Template Repository
-
-#### 2.1.3 Adding a Template Repo to an Existing Project
+### 2.1 Copying SASS Template Repo Manually
 
 Template repositories are designed for creating *new* projects. **Not** for integrating into existing ones.
 
@@ -68,26 +64,86 @@ Template repositories are designed for creating *new* projects. **Not** for inte
 
 *How to add Template to Existing Project Repo?*
 
-You must **Manually Copy88 the files from the SASS Template Repo and add them to the existing project.
+You must *Manually Copy* the files from the SASS Template Repo and add them to the existing project or see *Using Submodules* in section 2.2.
 
 1. Clone the SASS Template Repository
 2. Copy desired files and folders; e.g. `styles/...`
 3. Commit these new files to *ProjectRepo*'s existing repository.
 
-#### 2.1.4 Using Submodules to Pull Template Repository
+### 2.2 Using Submodules to manage the SASS Template Repo
 
 *How do git submodules work?*
 
-- A **git submodule** is a seperate Git repository that lives inside the *main project's* repository.
+- A **git submodule** is a **seperate** Git repository that lives inside the *main project's* repository.
 - The submodule **only stores a reference** to a specific commit from the pulled (i.e. Template) repository.
 
-*How to Update a Submodule?*
+### 2.3 Initial Setup for a New or Existing Project
 
-**Workflow:**
+1. **Initialize the main project:** If local project does not have a repository initiated:
 
-1. Apple
-2. Banana
+```bash
+  cd /path/to/NewProject
+  git init
+```
 
+2. **Add the SASS Template as a Submodule:** From the root of the mian project, add the submodule using the git command and remote repository link:
+
+```bash
+  git submodule add https://github.com/YourUsername/SASSTemplate.git sass
+```
+
+3. **Commit the submodule:** You must commit the changes to your main project repository which *locks* the submodule to the specific commit that was just cloned
+
+```bash
+  git commit -m "Add SASSTemplate as a submodule"
+```
+
+4. **Push your main project:** Push to the remote branch:
+
+```bash
+  git push origin main # or whatever your branch name is
+```
+
+This process accomplishes the following:
+
+- Initializes new local repository and creates `sass/` directory within project root
+- Clones the SASSTemplate repository into `my-project/sass`
+- Creates a `.gitmodules` file in the main project root which tracks the URL and local path of all submodules
+- Stages the new `sass/` directory and `.gitmodules` file
+- Locks the submodule to the specific commit that just cloned
+- Pushes the reference to teh SASS Template to the project's remote repository
+
+### 2.4 Updating the Sass Template Submodule
+
+This is the process of pulling new version (i.e. features) from the template's creators. It will preserve local changes.
+
+1. **Commit your changes in the submodule:** This saves local changes as a permanent part of the submodule's history:
+
+```bash
+  cd my-project/sass/
+  git add .
+  git commit -m "Add my custom components"
+```
+
+2. **Update the Submodule to the latest remote commit:** While in `my-project/sass`, pull latest changes from remote SASS Template Repo:
+
+```bash
+  git pull origin main # or whatever the default branch is
+```
+
+3. **Return to the main project directory and commit the new submodule:** After successful pull and merge of remote SASS Template, return to main project directory and commit the new state of the submodule
+
+```bash
+  cd ..
+  git add sass
+  git commit -m "Update submodule and include my custom components"
+```
+
+1. **Push your main project changes:** Finally (while in main project root), update the MyProject remote repository so both the sass template is updated and your changes persist
+
+```bash
+  git push origin main
+```
 ---
 
 ## 3.0 Directories, Files, and Namespaces
@@ -589,3 +645,61 @@ It's not just that you *can* add properties to the same tag in multiple files—
   - `.block` A standalone component, e.g. `.card` or `.nav`
   - `.block__element` A part of a block, e.g. `card__title`
   - `.block--modifier` A different state or version, e.g. `.card--dark`, `.nav--sticky`
+
+## 6.0 Manufacturing Process of the SASS Template Repository
+
+### 6.1 Create a new repository in github
+
+ 1. Name: `sass-template`
+ 2. Description: `A template repository for starting a new SASS project.`
+ 3. Visibility: `public`
+ 4. **Do Not** check the vox to initialize the repository
+ 5. Click *Create*
+
+### 6.2 Add project's boilerplate files
+
+1. Create directory and init repository locally
+2. Create files and directory structure
+3. **Generate the `package.json` file with dev dependencies for SASS and a compiler:**
+
+```json
+{
+  "name": "sass-template",
+  "version": "1.0.0",
+  "description": "A template repository for starting a new SASS project.",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass src/sass:dist/css",
+    "sass:watch": "sass --watch src/sass:dist/css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.77.8"
+  }
+}
+```
+
+4. Add and commit files
+
+```bash
+  git add .
+  git commit -m "Initial SASS template structure"
+```
+
+5. Push local repository to Github
+
+```bash
+  git remote add origin https://github.com/your-username/sass-template.git
+  git branch -M main
+  git push -u origin main
+```
+
+### 6.3 Convert Repository into a Template
+
+1. Return to github remote repository page
+2. Click on *Settings* tab
+3. In the *General* section, find *Template repository* option
+4. Check the box labeled *Template repository*
+5. Click *Save Changes*
