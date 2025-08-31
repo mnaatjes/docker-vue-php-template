@@ -241,6 +241,9 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 * 1 main.scss file to
   import them all.
 
+**Separation of Concerns**
+It's not just that you *can* add properties to the same tag in multiple files—it's that you **should**. Each file has a different purpose and level of specificity.
+
 
 * **SASS Directory Structure:**
 
@@ -282,7 +285,7 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 ### 3.1.2 Abstracts
 
 **Placeholders:**
-- What are placeholders and what goes in the `./abstract/placeholders/` file?
+- *What are placeholders and what goes in the `./abstract/placeholders/` file?*
 
 * **Placeholder:** special type of selector in SASS that looks and acts like a class but begins with `%`
 
@@ -308,13 +311,39 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 
 
 ### 3.1.3 Base
-- What is the `base/` directory for and what does the name mean?
+- *What is the `base/` directory for and what does the name mean?*
 
 * **`base/` Directory** holds foundational styles for the project, defined the standard look or raw HTML elements
 
+  - *What goes in the `_base.scss` file? What is meant by "common elements"?*
+
+  * The file should contain styles for the **most fundamental elements of the HTML document itself**
+
+  * **Tags:** `<html>, <body>`    
+
+  * **Responsive Media:** like images, videos, and other embedded media responsive by default, e.g. `img, svg {max-width...}`
+
+  * **Global Box-Sizing:** is a modern *best practice*
+
+  * **Other Global Element Styles:** Elements that are non-component like the `<hr>`
+
+  * **Examples:**
+
+  ```sass
+    html {
+      font-size: 16px; // Property related to html tag
+      box-sizing: border-box; // Global box sizing
+    }
+
+    *,
+    *::before {
+      box-sizing: inherit // Global properties of non-components
+    }
+  ```
+
 * **_reset.scss** Normalize file - i.e. to strip away all default browser styling - for a consistent, baseline work
 
-  - What is resetting / normalization and what is it not?
+  - *What is resetting / normalization and what is it not?*
 
   * **Resetting / Remove Evering Approach:**
     * **What:** Remove *all* built in browser styling
@@ -326,22 +355,33 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
     * **Goal:** Elements that behave predictable and look reasonably well styled by default and regardless of browser
     * **Example:** https://necolas.github.io/normalize.css/
 
-
-
 * **_typocraphy.scss** Defines the default appearance of all text elements like `<h1>, <p>, <a>` etc. Can define `color`, `line-height`, `font-size`, and `font-family`
 
+  - *What is considered a "typography rule"? What goes in the `_typography.scss` file and what doesn't?*
+
+      * Elements the `_typography.scss` file **Should Contain** selectors for raw HTML text elements: headings `<h1>, <h2>, <h3>...`, paragraphs `<p>`, lists `<ul>, <ol>, <li>`, and inline text elements like `<blockquote>, <em>, <small>, <strong>`
+
+      * Properties the file **Should Contain** are: `font-size`, `margin`, `margin-bottom`, `color`, `text-decoration`...
+
+      * Specific components or utilities **do not** belong in `_typography.scss` **nor do** class based properties; e.g. `.error-text{}` 
+
+      * Typography *inside* a component **does not** belong here; it belongs with the other components; e.g. `button {}` because these styles are completely dependent upon the component.
+
+      * Layout properties **don't belong** like `float:left` or `width: 100px` 
+
+      * `<body` Foundational Font Settings **don't** belong
+
   * Holds typographic definitions for child elements, NOT `<html> or <body>` elements
+
+* **Follow the Reset --> Style Pattern**
+  * Separation ensures you are always building upon a consistent foundation
+  * **Example:** reset inconsistent margins then in `_typography.scss` add back exact properties desired
 
 * **_base.scss** Catch-all for other base styles applied to `<html> or <body>` elements such as `box-sizing`, `border-box`, `background-colors`...
 
   * **Single Responsibility Principle:** `_base.scss` is responsible for the specific rules governing **all** typofraphic elements
   * Set global defaults on the parent - even for typography attributes - in `_base.scss` 
   * Developer expects to check `_base.scss` for default behaviors
-
-
-- What is considered a "typography rule"? What goes in the `_typography.scss` file and what doesn't?
-
-- What goes in the `_base.scss` file? What is meant by "common elements"
 
 
 ### 3.1.4 Components
