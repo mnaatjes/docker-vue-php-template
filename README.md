@@ -284,30 +284,91 @@ It's not just that you *can* add properties to the same tag in multiple files—
 
 ### 3.1.2 Abstracts
 
-**Placeholders:**
+**`abstracts/_placeholders.scss`:**
 - *What are placeholders and what goes in the `./abstract/placeholders/` file?*
 
-* **Placeholder:** special type of selector in SASS that looks and acts like a class but begins with `%`
+  * **Placeholder:** special type of selector in SASS that looks and acts like a class but begins with `%`
 
-* **A "Silent Class"** Rulesets that use placeholder selector will **not** be rendered into final CSS unless placeholder is explicitly `@extended`
+  * **A "Silent Class"** Rulesets that use placeholder selector will **not** be rendered into final CSS unless placeholder is explicitly `@extended`
 
-* The **`abstracts/_placeholders.scss`** file contains defined, reusable, non-outputting blocks of CSS properties.
+  * The **`abstracts/_placeholders.scss`** file contains defined, reusable, non-outputting blocks of CSS properties.
 
-* **Cannot use namespaces:** When including `@use abstracts/placeholders` cannot declare a namespace like `as x`. 
+  * **Cannot use namespaces:** When including `@use abstracts/placeholders` cannot declare a namespace like `as x`. 
 
-* **Examples:**
-  * A base style for all message boxes:
-  ```sass
-    // ._placeholders.scss definitions
-    %message-base {
-      border: 1px solid;
-      padding: 1rem;
-      font-size: 0.75rem
-    }
+  * **Examples:**
+    * A base style for all message boxes:
+    ```sass
+      // ._placeholders.scss definitions
+      %message-base {
+        border: 1px solid;
+        padding: 1rem;
+        font-size: 0.75rem
+      }
 
-    // usage
-    .some-class {@extend %message-base;}
-  ```
+      // usage
+      .some-class {@extend %message-base;}
+    ```
+
+**`abstracts/_variables.scss`**
+
+  * **Purpose:** To define the **Static, Structural Constants** of the Design System. Values are the *fundamental* definitions of the site's layout 
+
+  * **Syntax** `$var-name: value` and invoked where "v" is import namespace: `property: v.$var-name;`
+
+  * Variables are the **bones** or *skeleton* of the entire site.
+
+  * **Usage:** Use SASS variables for the static properties and **structural** styles at *compile-time*.
+
+    * **Media Query Breakpoints:** use directly because this requires a static value; e.g. `@media(min-width: $breakpt-md)...`
+
+    * **Grid System** logic for calcualting column widths, gutters, etc
+
+    * **Sass Logic** when using loops `@if, @for, @each`
+
+    * **Z-index Management** using a SASS map - which is a structural concern; e.g. `$z-indeces`
+
+    * **Litmus Test:** *Does the SASS Compiler need this value to generate the CSS structure?*
+
+  * **CSS Variables** used for *visual appearance* or "skin" of elements and styles. Anything that defines the *look and feel*
+
+    * **Colors:** for `background-color, border-color, box-shadow`; Example:
+
+    ```sass
+      // sass variable definition
+      // abstracts/_variables.scss
+      $border-color: #999999;
+      $border-color-dark: #f9f9f9
+
+      // CSS variable reference
+      // theme/_config.scss
+      :root {
+        --border-color: $border-color;
+      }
+
+      // theme/_dark.scss
+      .dark-theme {
+        --border-color: $border-color-dark;
+      }
+
+      // usage
+      // components/_card.scss
+      .card{
+        border-color: var(--border-color);
+      }
+
+
+    ```
+
+
+    * **Typography:** `font-family, font-size, font-weight`
+
+    * **Borders and Surfaces:** `border-radius, border-color, box-shadow`
+
+    * **Spacing:** `paddings, margin, gap`
+
+    * **Sizes:** `max-width, height`
+
+    * **Litmus:** *Might I ever want to change this value?*
 
 
 ### 3.1.3 Base
@@ -391,26 +452,94 @@ It's not just that you *can* add properties to the same tag in multiple files—
 
 
 ### 3.1.4 Components
-- Why is `_button.scss` not plural? Is there just one button document for the entire site? Where do styles for states of the button go (e.g. hover, active, etc...)?
+- Is there just one button document for the entire site? Where do styles for states of the button go (e.g. hover, active, etc...)?
 
-  * 
+  * **Button States:** The styles for states like :hover, :active, and :focus go in the same file. Sass's nesting feature is perfect for this, as it keeps state-related styles logically grouped with the base component styles.
+
+  * **One File:** Goal is to have on efile to define the `<button>` element and classes like `.btn-primary, .btn-lrg` etc.
 
 
-- What does in `components/` directory and what does not?
+- What goes in `components/` directory?
+
+  * **Reusable** components able to be dropped anywhere on a site.
+
+  * **Self-Contained** component styles should not depend on or *leak* out and affect other elements.
+
+  * **Examples:** `_buttons.scss, _cards.scss, _forms.scss, _navbar.scss, _accordion.scss, _tooltips.scss`
+
+- What **does not** go in the `components/` directory?
+
+  * **No *Boilerplate*** styles that belone in `_reset.scss or _base.scss`
+
+  * **Layout Styles:** Styles for the *major structural elements* should **not** be in `components/` and instead belong in `layout`. Examples of this are: `_header.scss, _sidebar.scss, grid.scss (.container, .row, .col)`
+
+  * **Pages** Styles for `_home.scss`, etc
 
 ### 3.1.5 Layout
 - If you aren't using a "grid system" or you are using flex or another layout - what do you call the document?
 
-  * Use a common descriptive name for the primary layout and structural styles: 
+  * Use a common descriptive name for the primary layout and structural styles. **Examples:** `_layout.scss`, `_flexbox.scss`, etc.
 
-  * **Examples:** `_layout.scss`, `_flexbox.scss`, etc.
+  * **Major Structural / Semantic Elements** belong in the `layouts/` directory. 
+    * **Examples:** `_header.scss, _sidebar.scss`.
+    * These major elements should contain **all** of the style properties for the element (not just layout related properties).
+    * These layout elements are considered non-reusable, *macro-components* which appear in *one* context.
+    * **Exception:** When styling the *theme* of the `_header.scss`, those pertient styles belong in the `themes/` directory
+
 
 ### 3.1.6 Pages
-- What is considered a page? How are semantic tags used for styling?
+- What is considered a page? 
 
+  * **Unique and Specific** to *one page only*
+
+  * **Non-reusable** styles or for *overriding* default look of a `component/_layout.scss` block
+
+  * **Structural / Semantic Elements *Specific* to a *Page*:** For instance, if the `<header>` element (set in `layout/_header.scss`) requires a change of background property for the "about" or "home" page.
 
 ### 3.1.7 Themes
 - Is all that goes in just "light" and "dark" or is there more to the `_themes.scss` file?
+
+  * **Defining Swappable *Skins*** Aside from "light" or "dark" themes; i.e. **User-Choice** themes.
+
+  * **Branding** themes; e.g. the site hosts projects from different companies - a "Google" theme in `themes/_google.scss`
+
+  * **Accesibiity:** for instance, a *High-Contrast* color palette.
+
+
+* **Theme:** A collection of *global* variables and styles controlling the aesthetic of the site 
+
+  * **Separates the Core Structure** and layouts of components from their visual finish
+
+  * Fulfills the role of a **Dynamic Theming System** instead of a *Static Design System*
+
+* **Examples:**
+
+  * `themes/_config.scss` for defining the "light" theme:
+
+  ```sass
+    // Root defines the light theme variables by default
+    :root{
+      --bg-color: $bg-color
+    }
+  ```
+
+  * `themes/_dark.scss` for defining "dark" theme:
+
+  ```sass
+    // Class defines dark theme
+    .theme-dark {
+      --bg-color: $bg-color-dark;
+    }
+  ```
+
+  * **Implementation:** The component (semantic element, etc...) use the **CSS Variable Syntax** to define the colors to that a theme can be imposed:
+
+  ```base
+    // in components/_card.scss
+    .card {
+      background-color: var(--bg-color);
+    }
+  ```
 
 
 ### 3.1.8 Vendors
@@ -490,9 +619,6 @@ Common Rules and Practices
 
 ### 3.3.2 Common Tasks
 - How to use a namespace with variables, mixins, etc...?
-
-- What does "Explicit Dependencie: It's clear which partials are being used" mean?
-
 
 ### 3.3.3 Variable Rules
 * **Store Reusable Values** like color, fonts, spacing units in central `_variables.scss`
