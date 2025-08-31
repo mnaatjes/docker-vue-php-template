@@ -43,15 +43,38 @@ This Template Repository contains the directory structure, variable, function, m
 
 ---
 
-## 2.0 Template Repository, Patterns, and Best Practices
+## 2.0 Template Repository and Best Practices
 
 ### 2.1 Template Repositories
+
+#### 2.1.1 Overview
 
 ***What is a Template Repository?***
 
 - A template repository is a specialized type of GitHub repository designed to be a starting point for new projects. 
 - When you create a new repository from a template, GitHub creates a fresh repository with the same file structure, branches, and files as the template. 
 - The key distinction is that the new repository does not retain the commit history of the template
+
+***How Does Version Control Work for a Template Repo?***
+
+- Works like any other repository
+- To share updates with *already created projects* you must update that project using the remote
+
+#### 2.1.2 Creating a Template Repository
+
+#### 2.1.3 Adding a Template Repo to an Existing Project
+
+Template repositories are designed for creating *new* projects. **Not** for integrating into existing ones.
+
+- A new *Project-Repo* has no shared history with the template and therefore cannon `git merge`
+
+*How to add Template to Existing Project Repo?*
+
+You must **Manually Copy88 the files from the SASS Template Repo and add them to the existing project.
+
+1. Clone the SASS Template Repository
+2. Copy desired files and folders; e.g. `styles/...`
+3. Commit these new files to *ProjectRepo*'s existing repository.
 
 ### 2.2 Best Practices
 
