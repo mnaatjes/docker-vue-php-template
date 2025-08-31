@@ -319,6 +319,8 @@ It's not just that you *can* add properties to the same tag in multiple files—
 
   * The file should contain styles for the **most fundamental elements of the HTML document itself**
 
+  * **Avoid using `*`** when defining styles. Instead use `<html>`
+
   * **Tags:** `<html>, <body>`    
 
   * **Responsive Media:** like images, videos, and other embedded media responsive by default, e.g. `img, svg {max-width...}`
@@ -343,6 +345,8 @@ It's not just that you *can* add properties to the same tag in multiple files—
 
 * **_reset.scss** Normalize file - i.e. to strip away all default browser styling - for a consistent, baseline work
 
+  * Styles should only contain properties to *remove styles* and values that set a *neutral* state
+
   - *What is resetting / normalization and what is it not?*
 
   * **Resetting / Remove Evering Approach:**
@@ -354,6 +358,8 @@ It's not just that you *can* add properties to the same tag in multiple files—
     * **What:** Doen't remove *all* styles. Makes default styles consistent and preserves useful defaults
     * **Goal:** Elements that behave predictable and look reasonably well styled by default and regardless of browser
     * **Example:** https://necolas.github.io/normalize.css/
+
+    * **Refrain** from using `_variables.scss` in `_reset.scss`
 
 * **_typocraphy.scss** Defines the default appearance of all text elements like `<h1>, <p>, <a>` etc. Can define `color`, `line-height`, `font-size`, and `font-family`
 
@@ -387,6 +393,10 @@ It's not just that you *can* add properties to the same tag in multiple files—
 ### 3.1.4 Components
 - Why is `_button.scss` not plural? Is there just one button document for the entire site? Where do styles for states of the button go (e.g. hover, active, etc...)?
 
+  * 
+
+
+- What does in `components/` directory and what does not?
 
 ### 3.1.5 Layout
 - If you aren't using a "grid system" or you are using flex or another layout - what do you call the document?

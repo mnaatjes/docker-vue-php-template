@@ -14,26 +14,11 @@
 
 // Import: Base
 @use './styles/base/base';
+@use './styles/base/reset';
+@use './styles/base/typography';
 
-// Example usage of the variables from the imported file:
-body {
-  font-family: variables.$font-family-base;
-  //color: variables.$text-color;
-  color: orange;
-}
-
-h1 {
-  font-size: variables.$font-size-h1;
-  color: variables.$primary-dark;
-}
-
-.button {
-  padding: variables.$spacing-md;
-  border-radius: variables.$border-radius;
-  background-color: variables.$primary-color;
-  color: variables.$text-light-color;
-  box-shadow: variables.$box-shadow;
-}
+// Import Components
+@use './styles/components/button';
 
 
 // Debugging

@@ -1,0 +1,19 @@
+// Import
+@use '../abstracts/variables' as v;
+@use 'sass:color';
+
+
+// Button Component
+button {
+  background-color: v.$secondary-color;
+  color: white;
+  padding: v.$spacing-md v.$spacing-lg;
+  text-align: center;
+  display: inline-block;
+  margin: v.$spacing-md;
+  border-radius: v.$border-radius;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: color.adjust(#42b983, $lightness: -10%);
+  }
+}

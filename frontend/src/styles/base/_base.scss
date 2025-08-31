@@ -9,4 +9,11 @@
 // Body
 body {
 	background-color: v.$background-color;
+	font-family: v.$font-family-base;
+  	color: orange;
+}
+
+// HTML
+html {
+	font-size: 16px;
 }

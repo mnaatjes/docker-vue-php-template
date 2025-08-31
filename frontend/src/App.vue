@@ -49,28 +49,7 @@ export default {
 @use 'sass:color';
 
 #vue-app {
-  font-family: Arial, sans-serif;
   text-align: center;
   margin-top: 60px;
-  h1 {
-    color: #42b983;
-  }
-  button {
-    background-color: #42b983;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-    &:hover {
-      background-color: color.adjust(#42b983, $lightness: -10%);
-    }
-  }
 }
 </style>

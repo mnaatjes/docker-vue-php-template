@@ -1,0 +1,10 @@
+// Typography
+
+// Imports
+@use '../abstracts/variables' as v;
+
+// Headings
+h1 {
+  font-size: v.$font-size-h1;
+  color: v.$primary-color;
+}
