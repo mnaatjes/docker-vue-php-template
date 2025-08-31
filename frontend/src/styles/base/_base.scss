@@ -1,0 +1,12 @@
+// Base.scss
+// A general catch-all for other base styles applied 
+// to the <html> or <body> elements, such as setting box-sizing: 
+// border-box; or default background colors.
+
+// Import: variables
+@use '../abstracts/variables' as v;
+
+// Body
+body {
+	background-color: v.$background-color;
+}

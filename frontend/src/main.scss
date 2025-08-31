@@ -7,15 +7,19 @@
 
 // Use the variables from the _variables.scss file. The "variables"
 // namespace is automatically created from the filename.
+
+// Import: Abstracts
 @use './styles/abstracts/variables';
 @use './styles/abstracts/placeholders';
+
+// Import: Base
+@use './styles/base/base';
 
 // Example usage of the variables from the imported file:
 body {
   font-family: variables.$font-family-base;
   //color: variables.$text-color;
   color: orange;
-  background-color: variables.$background-color;
 }
 
 h1 {

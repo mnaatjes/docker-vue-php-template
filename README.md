@@ -310,9 +310,33 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 ### 3.1.3 Base
 - What is the `base/` directory for and what does the name mean?
 
+* **`base/` Directory** holds foundational styles for the project, defined the standard look or raw HTML elements
+
+* **_reset.scss** Normalize file - i.e. to strip away all default browser styling - for a consistent, baseline work
+
+  - What is resetting / normalization and what is it not?
+
+  * **Resetting / Remove Evering Approach:**
+    * **What:** Remove *all* built in browser styling
+    * **Goal:** Forcing all elements to look identical and completely unstyled
+    * **Example:** https://meyerweb.com/eric/tools/css/reset/
+
+  * **Normalization: Make Everything Consistent**
+    * **What:** Doen't remove *all* styles. Makes default styles consistent and preserves useful defaults
+    * **Goal:** Elements that behave predictable and look reasonably well styled by default and regardless of browser
+    * **Example:** https://necolas.github.io/normalize.css/
 
 
-- What is resetting / normalization and what is it not?
+* **_typocraphy.scss** Defines the default appearance of all text elements like <h1>, <p>, <a> etc. Can define `color`, `line-height`, `font-size`, and `font-family`
+
+  * Holds typographic definitions for child elements, NOT <html> or <body> elements
+
+* **_base.scss** Catch-all for other base styles applied to <html> or <body> elements such as `box-sizing`, `border-box`, `background-colors`...
+
+  * **Single Responsibility Principle:** `_base.scss` is responsible for the specific rules governing **all** typofraphic elements
+  * Set global defaults on the parent - even for typography attributes - in `_base.scss` 
+  * Developer expects to check `_base.scss` for default behaviors
+
 
 - What is considered a "typography rule"? What goes in the `_typography.scss` file and what doesn't?
 
@@ -326,6 +350,9 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 ### 3.1.5 Layout
 - If you aren't using a "grid system" or you are using flex or another layout - what do you call the document?
 
+  * Use a common descriptive name for the primary layout and structural styles: 
+
+  * **Examples:** `_layout.scss`, `_flexbox.scss`, etc.
 
 ### 3.1.6 Pages
 - What is considered a page? How are semantic tags used for styling?
