@@ -1,0 +1,21 @@
+// Functions.scss
+// 
+// Import SASS Methods
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:color';
+
+// Import Variables
+@use './variables' as v;
+
+/**
+ * Converts a pixel value to a rem value
+ * @param {Number} $pixels
+ * @return {Number} Equivalent rem value
+ */
+@function rem($pixels){
+	@if not unitless($pixels){
+		@error "$pixels value must have no units!";
+	}
+	@return math.div($pixels, v.$font-size-base-px) * 1rem;
+}

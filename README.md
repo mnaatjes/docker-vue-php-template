@@ -619,20 +619,189 @@ Common Rules and Practices
 
 
 ## 3.12 Mixins
+
+* **A Mixin** is like a *function* in CSS used to define a *block of styles* that can be reused anywhere.
+
 * **Use for repeating patterns of CSS:** 
   * Expecially those that take arguments (parameters).
   * Common use for media queries
 
+* **Implemented:** Use the `@include` keyword:
+
+  ```sass
+    // definition
+    // abstracts/_mixins.scss
+
+    @mixin flex-center($direction row) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: $direction;
+    }
+
+    // implementation
+    // components/_login.scss
+    .login-container {
+      @include flex-center(column);
+    }
+  ```
+
+* **Usage:** Helpful for media-queries or any styles that require a parameter or when yo uneed to use the `@content` directive.
+
+* **Default Values** Always provide defaults parameter values when using mixins
+
+* Can **pass parameter values by name** instead of in-order:
+
+  ```sass
+    // definition
+    @mixin someThing($direction row, $radius 2rem)
+
+    // Usage
+    @include someThing($radius: 1rem, $direction: column)
+  ```
+
+## 3.13 Functions
+
+* **Functions:** are pieces of reusable code to perform *calcualtions* or *actions* and returns a *single* value
+
+  * Where a `@mixin` returns a block of code, a `@function` returns a single value.
+
+  * More like a spreadsheet formula than a javascript function
+
+  * Can import using a **Namespace**, e.g. `@use 'abstracts/functions' as f` and then implemented `font-size: f.someFunc(value);`
+
+* **Implementation:** Declare the function with the `@function <functionName>($argument default-value){...logic}`
+
+* **Usage:** Use to place the value produced by the function directly into the CSS property: `property: functionName(parameter-value);`
 
 
-## 3.13 
+## 3.14 SASS Built-in Methods
 
-## 3.14 Class Names with BEM: Block Element Modifier 
+* **Common Functions:** 
+  * **Color:** `lighten(), darken(), saturate(), mix()`
+  * **Number:** `random(), ceil(), floor()`
+  * **String:** `str-length(), to-upper-case()`
+  * **Map | List:** `map-get(), nth(), append()`
+
+
+### 3.14.1 Color Methods
+Suite of SASS functions allowing adjustment of color properties like lightness, hue, saturation.
+
+* **Importing:** `@use 'sass:color';` makes *all* of the color functions available.
+
+* **Usage Example:** to lighten a color
+  ```sass
+    @use 'sass:color' as color;
+    .btn-primary {
+      background-color: $primary-color;
+      &:hover {
+        background-color: color.darken($primary-color, 10%);
+      }
+    }
+  ```
+
+
+### 3.14.2 Map and List Methods
+
+* **Sass Lists:**
+  * An ordered sequence of values
+  ```sass
+    $font-stack: 'Helvetica, Arial, sans-serif'; // comma separated
+    $padding-values: '1px 3px 5px'; //space separated
+
+  ```
+
+  * **Delimiters:** Can be space or comma separated
+
+  * **Usage:** Great for an ordered sequence of values; especially when iterating.
+
+  ```sass
+    // Iteration
+    // List declaration
+    $socials: 'twitter', 'facebook', 'youtube';
+
+    // Function implementation
+    @each $site in $socials {
+      color: map.get($socials, $site)
+    }
+
+    // Get nth value
+    $letters: 'a', 'b', 'c';
+    $second: list.nth($letters, 2); // Returns 'b'
+
+  ```
+
+  * **Importing:** `@use sass:list`;
+
+* **SASS Maps:**
+  * Collection of **key-value pairs** similar to a PHP Associative Array or Javascript Object
+
+  * **Syntax:**
+  ```sass
+    $breakpoints: (
+      'sm': 576px,
+      'md': 768px,
+      'lg': 992px
+    );
+  ```
+
+  * **Usage:**
+  ```sass
+    // Import
+    @use 'sass:map';
+
+    // Check if breakpoint name exists
+    @if map.has-key($breakpoints, 'sm') {...}
+  ```
+
+## 3.15 Class Names with BEM: Block Element Modifier 
 * `.block` A standalone component, e.g. `.card` or `.nav`
 * `.block__element` A part of a block, e.g. `card__title`
 * `.block--modifier` A different state or version, e.g. `.card--dark`, `.nav--sticky`
 
 
+
+## 3.16 SASS Directive Tags
+
+* **`@error`** Intentionally *stops* the entire SASS compilation process and prints an error message to the console.
+  * Acts as a *guardrail* preventing invalid CSS
+  * **Example:**
+  ```sass
+    @error "Unknown Value in #{$color-name}";
+  ```
+
+* **`@use`** Imports or loads module files
+
+* **`@forward`** Partner to `@use`. It loads a SASS file and makes its members available to any other file that uses (implements `@use`) the current file.
+  * **Usage:** Useful for creating a router-like file to collect and then forward constituent files.
+
+  ```sass
+    // components/_button.scss
+    ...someCode
+
+    // components/_cards.scss
+    ...someCode
+
+    // components/_components.scss
+    @use './button';
+    @use './cards';
+
+    @forward './button';
+    @forward './cards';
+
+    // Main.scss
+    @use 'components/components';
+    // Includes both _cards.scss and button.scss
+
+  ```
+* **`@if | @else`**
+
+* **`@each`**
+
+
+* **`@debug`**
+
+* **`@warn`**
 
 ---
 
