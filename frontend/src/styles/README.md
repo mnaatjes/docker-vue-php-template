@@ -43,11 +43,7 @@ This Template Repository contains the directory structure, variable, function, m
 
 ---
 
-## 2.0 Template Repository and Best Practices
-
-### 2.1 Template Repositories
-
-#### 2.1.1 Overview
+## 2.0 Template Repository
 
 ***What is a Template Repository?***
 
@@ -60,7 +56,9 @@ This Template Repository contains the directory structure, variable, function, m
 - Works like any other repository
 - To share updates with *already created projects* you must update that project using the remote
 
-#### 2.1.2 Creating a Template Repository
+### 2.1 Workflows
+
+#### 2.1.2 Creating a Remote Template Repository
 
 #### 2.1.3 Adding a Template Repo to an Existing Project
 
@@ -76,41 +74,19 @@ You must **Manually Copy88 the files from the SASS Template Repo and add them to
 2. Copy desired files and folders; e.g. `styles/...`
 3. Commit these new files to *ProjectRepo*'s existing repository.
 
-### 2.2 Best Practices
+#### 2.1.4 Using Submodules to Pull Template Repository
 
-#### 2.2.1 Overview
+*How do git submodules work?*
 
-**7-1 Patterns:**
-The most popular and effective way to structure a SASS project is the "7-1 Pattern":
+- A **git submodule** is a seperate Git repository that lives inside the *main project's* repository.
+- The submodule **only stores a reference** to a specific commit from the pulled (i.e. Template) repository.
 
-- 7 folders for your partial files
-- 1 main.scss file to import them all.
+*How to Update a Submodule?*
 
-**Separation of Concerns**
-It's not just that you *can* add properties to the same tag in multiple files—it's that you **should**. Each file has a different purpose and level of specificity.
+**Workflow:**
 
-#### 2.2.2 General Practices
-
-- **Avoid Global Scope** with mixins, variables, and functions by using namespaces
-- **Use Explicit Dependencies**
-- **@import Depreciated:**
-
-  ```sass
-    @use 'abstracts/variables' as var;
-  ```
-
-- **DRY: Do Not Repeat Yourself!**
-- **Keep Nesting Shallow:** Use the "Inception Rule", don't go more than 3 levels deep:
-
-```sass
-  .nav_list{} // <-- This
-  .nav{ ul{ li{} }} <-- Not This
-```
-
-- **Utilize Class Names with BEM: Block Element Modifiers**
-  - `.block` A standalone component, e.g. `.card` or `.nav`
-  - `.block__element` A part of a block, e.g. `card__title`
-  - `.block--modifier` A different state or version, e.g. `.card--dark`, `.nav--sticky`
+1. Apple
+2. Banana
 
 ---
 
@@ -577,3 +553,39 @@ Suite of SASS functions allowing adjustment of color properties like lightness, 
 **`@warn`**
 
 ---
+
+## 5.0 SASS Best Practices with the Template
+
+### 5.1 Overview
+
+**7-1 Patterns:**
+The most popular and effective way to structure a SASS project is the "7-1 Pattern":
+
+- 7 folders for your partial files
+- 1 main.scss file to import them all.
+
+**Separation of Concerns**
+It's not just that you *can* add properties to the same tag in multiple files—it's that you **should**. Each file has a different purpose and level of specificity.
+
+### 5.1 General Practices
+
+- **Avoid Global Scope** with mixins, variables, and functions by using namespaces
+- **Use Explicit Dependencies**
+- **@import Depreciated:**
+
+  ```sass
+    @use 'abstracts/variables' as var;
+  ```
+
+- **DRY: Do Not Repeat Yourself!**
+- **Keep Nesting Shallow:** Use the "Inception Rule", don't go more than 3 levels deep:
+
+```sass
+  .nav_list{} // <-- This
+  .nav{ ul{ li{} }} <-- Not This
+```
+
+- **Utilize Class Names with BEM: Block Element Modifiers**
+  - `.block` A standalone component, e.g. `.card` or `.nav`
+  - `.block__element` A part of a block, e.g. `card__title`
+  - `.block--modifier` A different state or version, e.g. `.card--dark`, `.nav--sticky`
