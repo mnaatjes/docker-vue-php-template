@@ -9,17 +9,17 @@
 // namespace is automatically created from the filename.
 
 // Import: Abstracts
-@use './styles/abstracts/variables';
-@use './styles/abstracts/functions';
-@use './styles/abstracts/placeholders';
+@use './abstracts/variables';
+@use './abstracts/functions';
+@use './abstracts/placeholders';
 
 // Import: Base
-@use './styles/base/base';
-@use './styles/base/reset';
-@use './styles/base/typography';
+@use './base/base';
+@use './base/reset';
+@use './base/typography';
 
 // Import Components
-@use './styles/components/button';
+@use './components/button';
 
 
 // Debugging

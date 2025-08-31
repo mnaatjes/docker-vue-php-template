@@ -7,7 +7,7 @@
  */
 import { createApp } from 'vue' // Imports the function to create a Vue app
 import App from './App.vue'     // Imports the main component
-import './main.scss';           // Imports main sass file
+import './styles/main.scss';    // Imports main sass file
 
 // Creates the Vue application instance
 const app = createApp(App);
