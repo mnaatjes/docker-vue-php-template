@@ -1,10 +1,2 @@
-# Environment variables
-.env
-.env.production
-.env.local
-
-# Docker
-.docker/composer.lock
-
-# Node.js dependencies
-/frontend/node_modules/
+# Stuff
+token.md
