@@ -245,7 +245,7 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
 It's not just that you *can* add properties to the same tag in multiple files—it's that you **should**. Each file has a different purpose and level of specificity.
 
 
-* **SASS Directory Structure:**
+### 3.1.2 Directory Structure
 
 ```
 /frontend/
@@ -282,7 +282,7 @@ It's not just that you *can* add properties to the same tag in multiple files—
 ```
 
 
-### 3.1.2 Abstracts
+## 3.2 Abstracts
 
 **`abstracts/_placeholders.scss`:**
 - *What are placeholders and what goes in the `./abstract/placeholders/` file?*
@@ -371,7 +371,7 @@ It's not just that you *can* add properties to the same tag in multiple files—
     * **Litmus:** *Might I ever want to change this value?*
 
 
-### 3.1.3 Base
+## 3.3 Base
 - *What is the `base/` directory for and what does the name mean?*
 
 * **`base/` Directory** holds foundational styles for the project, defined the standard look or raw HTML elements
@@ -451,7 +451,7 @@ It's not just that you *can* add properties to the same tag in multiple files—
   * Developer expects to check `_base.scss` for default behaviors
 
 
-### 3.1.4 Components
+## 3.4 Components
 - Is there just one button document for the entire site? Where do styles for states of the button go (e.g. hover, active, etc...)?
 
   * **Button States:** The styles for states like :hover, :active, and :focus go in the same file. Sass's nesting feature is perfect for this, as it keeps state-related styles logically grouped with the base component styles.
@@ -475,7 +475,7 @@ It's not just that you *can* add properties to the same tag in multiple files—
 
   * **Pages** Styles for `_home.scss`, etc
 
-### 3.1.5 Layout
+## 3.5 Layout
 - If you aren't using a "grid system" or you are using flex or another layout - what do you call the document?
 
   * Use a common descriptive name for the primary layout and structural styles. **Examples:** `_layout.scss`, `_flexbox.scss`, etc.
@@ -487,7 +487,7 @@ It's not just that you *can* add properties to the same tag in multiple files—
     * **Exception:** When styling the *theme* of the `_header.scss`, those pertient styles belong in the `themes/` directory
 
 
-### 3.1.6 Pages
+## 3.6 Pages
 - What is considered a page? 
 
   * **Unique and Specific** to *one page only*
@@ -496,7 +496,7 @@ It's not just that you *can* add properties to the same tag in multiple files—
 
   * **Structural / Semantic Elements *Specific* to a *Page*:** For instance, if the `<header>` element (set in `layout/_header.scss`) requires a change of background property for the "about" or "home" page.
 
-### 3.1.7 Themes
+## 3.7 Themes
 - Is all that goes in just "light" and "dark" or is there more to the `_themes.scss` file?
 
   * **Defining Swappable *Skins*** Aside from "light" or "dark" themes; i.e. **User-Choice** themes.
@@ -542,7 +542,7 @@ It's not just that you *can* add properties to the same tag in multiple files—
   ```
 
 
-### 3.1.8 Vendors
+## 3.8 Vendors
 - What are common vendors to use with sass?
 
 - How are vendors installed / pulled?
@@ -550,10 +550,10 @@ It's not just that you *can* add properties to the same tag in multiple files—
 - How are vendors applied / @use and imported?
 
 
-## 3.2 Main.scss
+## 3.9 Main.scss
 The `main.scss` file acts as the single entry point and imports all the partials in a **specific** order. This order also structures dependencies with the last import being the **most dependent** on the sass framework.
 
-### 3.2.1 Import Order
+**Import Order**
 * Abstracts (no CSS Output)
 * Vendors
 * Base
@@ -562,9 +562,7 @@ The `main.scss` file acts as the single entry point and imports all the partials
 * Pages
 * Themes
 
-## 3.3 Rules and Best Practices
-
-### 3.3.1 General Overview
+## 3.10 Rules and Best Practices
 Common Rules and Practices
 
 * **Avoid Global Scope** with mixins, variables, and functions by using namespaces
@@ -617,23 +615,19 @@ Common Rules and Practices
 
 * **DRY: Do Not Repeat Yourself!**
 
-### 3.3.2 Common Tasks
 - How to use a namespace with variables, mixins, etc...?
 
-### 3.3.3 Variable Rules
-* **Store Reusable Values** like color, fonts, spacing units in central `_variables.scss`
 
-### 3.3.4 Mixin Rules
+## 3.12 Mixins
 * **Use for repeating patterns of CSS:** 
   * Expecially those that take arguments (parameters).
   * Common use for media queries
 
-- What are some other common uses for mixins and best practices?
 
 
-## 3.4 Naming Conventions
+## 3.13 
 
-### 3.4.1 Class Names with BEM: Block Element Modifier 
+## 3.14 Class Names with BEM: Block Element Modifier 
 * `.block` A standalone component, e.g. `.card` or `.nav`
 * `.block__element` A part of a block, e.g. `card__title`
 * `.block--modifier` A different state or version, e.g. `.card--dark`, `.nav--sticky`
