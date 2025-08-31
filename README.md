@@ -327,11 +327,12 @@ The most popular and effective way to structure a SASS project is the "7-1 Patte
     * **Example:** https://necolas.github.io/normalize.css/
 
 
-* **_typocraphy.scss** Defines the default appearance of all text elements like <h1>, <p>, <a> etc. Can define `color`, `line-height`, `font-size`, and `font-family`
 
-  * Holds typographic definitions for child elements, NOT <html> or <body> elements
+* **_typocraphy.scss** Defines the default appearance of all text elements like `<h1>, <p>, <a>` etc. Can define `color`, `line-height`, `font-size`, and `font-family`
 
-* **_base.scss** Catch-all for other base styles applied to <html> or <body> elements such as `box-sizing`, `border-box`, `background-colors`...
+  * Holds typographic definitions for child elements, NOT `<html> or <body>` elements
+
+* **_base.scss** Catch-all for other base styles applied to `<html> or <body>` elements such as `box-sizing`, `border-box`, `background-colors`...
 
   * **Single Responsibility Principle:** `_base.scss` is responsible for the specific rules governing **all** typofraphic elements
   * Set global defaults on the parent - even for typography attributes - in `_base.scss` 
