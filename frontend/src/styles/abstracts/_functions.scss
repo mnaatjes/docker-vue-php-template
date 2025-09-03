@@ -19,3 +19,12 @@
 	}
 	@return math.div($pixels, v.$font-size-base-px) * 1rem;
 }
+
+/**
+ * Removes the unit from the value
+ * @param {Number} $value - The value with a unit (e.g. 16px)
+ * @return {Number} Value without unit
+ */
+@function strip-unit($value){
+	return $value / ($value * 0 + 1);
+}
