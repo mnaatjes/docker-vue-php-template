@@ -1,12 +1,6 @@
 <template>
   <div id="vue-app">
-    <h1>Hello from Vue.js!</h1>
-    <p>This is your main application component.</p>
-    <button @click="incrementCount">Click me</button>
-    <p>Button was clicked {{ count }} times.</p>
-    <Test></Test>
-    <Table :data="tableData" />
-    
+    <Layout></Layout>
   </div>
 </template>
 
@@ -15,12 +9,14 @@ import { ref } from 'vue';
 // Import the new Table component
 import Table from './components/Table.vue';
 import Test from './components/Test.vue';
+import Layout from './components/Layout.vue';
 
 export default {
   // Register the component
   components: {
-    Table,
-    Test
+    Layout,
+    Test,
+    Table
   },
   setup() {
     const count = ref(0);
